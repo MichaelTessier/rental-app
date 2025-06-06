@@ -1,0 +1,14 @@
+.DS_Store
+*/**/node_modules
+coverage
+eslint-report.json
+
+# local env files
+*/**/config/env.local
+
+# Editor directories and files
+*.idea
+
+# Logs
+logs
+*.log

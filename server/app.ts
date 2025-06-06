@@ -1,11 +1,14 @@
 import express from 'express'
 import dotenv from 'dotenv'
+import { connectToDatabase } from './config/database'
 
 dotenv.config({
   path: './config/env.local',
 })
 
 const app = express()
+
+connectToDatabase()
 
 app.get('/', (req, res) => {
   res.send('Hello, World!')

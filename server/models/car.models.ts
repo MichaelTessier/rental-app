@@ -67,9 +67,9 @@ const carSchema = new mongoose.Schema({
     type: Number,
     required: [true, "Car power is required"],
   },
-  seat: {
+  seats: {
     type: Number,
-    required: [true, "Car seat count is required"],
+    required: [true, "Car seats count is required"],
   },
   doors: {
     type: Number,
@@ -89,5 +89,13 @@ const carSchema = new mongoose.Schema({
   timestamps: true
 })
 
+carSchema.virtual("ratings").get(function() {
+  return {
+    value: 5,
+    count: 10
+  }
+});
+ 
+const Car = mongoose.model("Car", carSchema)
 
-export default mongoose.model("Car", carSchema)
+export default Car;

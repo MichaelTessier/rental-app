@@ -3,8 +3,8 @@
 coverage
 eslint-report.json
 
-# local env files
-*/**/config/env.local
+.temp
+.env
 
 # Editor directories and files
 *.idea

@@ -1,5 +1,5 @@
 {
-  "name": "rental-app-server",
+  "name": "@rental-app/server",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
@@ -13,6 +13,7 @@
     "@apollo/server": "^4.12.2",
     "@as-integrations/express5": "^1.0.0",
     "@graphql-tools/schema": "^10.0.23",
+    "@rental-app/shared": "file:../shared",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
     "graphql": "^16.11.0",

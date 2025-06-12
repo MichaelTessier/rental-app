@@ -494,6 +494,9 @@
   resolved "https://registry.yarnpkg.com/@protobufjs/utf8/-/utf8-1.1.0.tgz#a777360b5b39a1a2e5106f8e858f2fd2d060c570"
   integrity sha512-Vvn3zZrhQZkkBE8LSuW3em98c0FwgO4nxzv6OdSxPKJIEKY2bGbHn+mhGIPerzI4twdxaP8/0+06HBpwf345Lw==
 
+"@rental-app/shared@file:../shared":
+  version "1.0.0"
+
 "@sigstore/bundle@^3.1.0":
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/@sigstore/bundle/-/bundle-3.1.0.tgz#74f8f3787148400ddd364be8a9a9212174c66646"

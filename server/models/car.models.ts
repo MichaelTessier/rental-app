@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
+import { Car, CarBrand, CarCategory, CarDoors, CarFuelType, CarSeats, CarStatus, CarTransmission } from "@rental-app/shared"
 
-const carSchema = new mongoose.Schema({
+const carSchema = new mongoose.Schema<Car>({
   name: {
     type: String,
     required: [true, "Car name is required"],
@@ -11,8 +12,11 @@ const carSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    // enum: ["available", "rented", "maintenance"],
-    default: "Draft",
+    default: CarStatus.Draft,
+    enum: {
+      values: Object.values(CarStatus),
+      message: "Invalid car status"
+    }
   },
   rentPerDay: {
     type: Number,
@@ -31,25 +35,10 @@ const carSchema = new mongoose.Schema({
   brand: {
     type: String,
     required: [true, "Car brand is required"],
-    enum: [
-      "Toyota",
-      "Honda",
-      "Ford",
-      "Chevrolet",
-      "Nissan",
-      "BMW",
-      "Mercedes-Benz",
-      "Audi",
-      "Volkswagen",
-      "Hyundai",
-      "Kia",
-      "Subaru",
-      "Mazda",
-      "Lexus",
-      "Porsche",
-      "Jaguar",
-    ],
-    message: "Invalid car brand"
+    enum: {
+      values: Object.values(CarBrand),
+      message: "Invalid car brand"
+    }
   },
   year: {
     type: Number,
@@ -58,6 +47,10 @@ const carSchema = new mongoose.Schema({
   transmission: {
     type: String,
     required: [true, "Car transmission type is required"],
+    enum: {
+      values: Object.values(CarTransmission),
+      message: "Invalid car transmission type"
+    }
   },
   millage: {
     type: Number,
@@ -70,18 +63,34 @@ const carSchema = new mongoose.Schema({
   seats: {
     type: Number,
     required: [true, "Car seats count is required"],
+    enum: {
+      values: Object.values(CarSeats),
+      message: "Invalid car seats count"
+    }
   },
   doors: {
     type: Number,
     required: [true, "Car door count is required"],
+    enum: {
+      values: Object.values(CarDoors),
+      message: "Invalid car door count"
+    }
   },
   fuelType: {
     type: String,
     required: [true, "Car fuel type is required"],
+    enum: {
+      values: Object.values(CarFuelType),
+      message: "Invalid car fuel type"
+    }
   },
   category: {
     type: String,
     required: [true, "Car category is required"],
+    enum :{
+      values: Object.values(CarCategory),
+      message: "Invalid car category"
+    }
   },
   reviews: [String]
   
@@ -96,6 +105,6 @@ carSchema.virtual("ratings").get(function() {
   }
 });
  
-const Car = mongoose.model("Car", carSchema)
+const Car = mongoose.model<Car>("Car", carSchema)
 
 export default Car;

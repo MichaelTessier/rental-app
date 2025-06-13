@@ -1,17 +1,28 @@
-import { useState } from 'react'
-import { Button } from "@/components/ui/button"
+import { BrowserRouter, Route, Routes } from "react-router"
+import Header from './components/layout/Header'
+import Footer from './components/layout/Footer'
+import Home from "./components/pages/Home"
+
 
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
     <>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <Button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </Button>
-      </div>
+      <BrowserRouter>
+        <div className="flex flex-col min-h-screen justify-between bg-gray-100">
+
+          <Header />
+            <Routes>
+              <Route path="/" element={<Home />} />
+              {/* <Route path="/login" element={<Login />} /> */}
+              {/* <Route path="/register" element={<Register />} /> */}
+              {/* <Route path="/admin/dashboard" element={<AdminDashboard />} /> */}
+              {/* <Route path="/me/bookings" element={<MyBookings />} /> */}
+              {/* <Route path="/me/profile" element={<UserProfile />} /> */}
+            </Routes>
+          <Footer />
+        </div>
+      </BrowserRouter>
     </>
   )
 }

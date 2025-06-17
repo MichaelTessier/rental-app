@@ -1,5 +1,5 @@
-import { carById, carList, createCar, deleteCar, updateCar } from "../../controllers/car.controllers";
-import { CarInput } from "../../types/car.types";
+import { carById, carList, createCar, deleteCar, updateCar } from "./car.controllers";
+import { CarInput } from "./car.types";
 
 export const carResolvers = {
 

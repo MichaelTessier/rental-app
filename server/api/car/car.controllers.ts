@@ -1,5 +1,5 @@
-import Car from "../models/car.models";
-import { CarInput } from "../types/car.types";
+import Car from "./car.models";
+import { CarInput } from "./car.types";
 
 export const carList = async () => {
   const cars = await Car.find();

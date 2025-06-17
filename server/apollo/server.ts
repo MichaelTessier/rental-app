@@ -3,8 +3,8 @@ import cors from "cors";
 import { makeExecutableSchema } from "@graphql-tools/schema";
 import { ApolloServer } from "@apollo/server";
 import { expressMiddleware } from '@as-integrations/express5';
-import { carTypeDefs } from "../graphql/typeDefs/car.typeDefs";
-import { carResolvers } from "../graphql/resolvers/car.resolvers";
+import { carTypeDefs } from "../api/car/car.typeDefs";
+import { carResolvers } from "../api/car/car.resolvers";
 
 
 export async function startApolloServer(app: Application) {

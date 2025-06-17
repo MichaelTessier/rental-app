@@ -1,6 +1,5 @@
 import { gql } from 'graphql-tag' 
 
-
 export const carTypeDefs = gql`
   type Query {
     cars: [Car]

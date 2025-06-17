@@ -6,8 +6,8 @@ import {
   SheetTitle,
   SheetHeader,
   SheetDescription,
-} from "../ui/sheet";
-import { Button } from "../ui/button";
+} from "@/components/shadcn/sheet";
+import { Button } from "@/components/shadcn/button";
 import { CarTaxiFront, MenuIcon } from "lucide-react";
 import {
   DropdownMenu,
@@ -15,8 +15,8 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+} from "@/components/shadcn/dropdown-menu";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/shadcn/avatar";
 // import AdminMobileMenu from "../mobile-menu/AdminMobileMenu";
 
 const Header = () => {

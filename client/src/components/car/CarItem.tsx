@@ -1,9 +1,10 @@
-import { Card } from "../ui/card";
-import { Button } from "../ui/button";
-import { Badge } from "../ui/badge";
+import { Card } from "@/components/shadcn/card";
+import { Button } from "@/components/shadcn/button";
+import { Badge } from "@/components/shadcn/badge";
 import { Link } from "react-router-dom";
 import { CarFront, CircleDot, MoveRight } from "lucide-react";
 import type { Car } from "@rental-app/shared";
+import StarRatings from 'react-star-ratings';
 
 type Props = {
   car: Car
@@ -44,7 +45,14 @@ const CardItem = ({car}: Props) => {
             </Badge>
           </div>
           <div className="flex items-center my-2">
-            {/* Star Ratings Component */}
+            <StarRatings
+              rating={car.ratings.value}
+              starRatedColor="orange"
+              numberOfStars={5}
+              name='rating'
+              starDimension="15px"
+              starSpacing="2px"
+            />
             <p className="ms-2 text-sm font-bold text-gray-900 dark:text-white">
               {car?.ratings?.value}
             </p>

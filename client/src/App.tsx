@@ -2,6 +2,7 @@ import { BrowserRouter, Route, Routes } from "react-router"
 import Header from './components/layout/Header'
 import Footer from './components/layout/Footer'
 import Home from "./components/pages/Home"
+import Car from "./components/pages/Car"
 
 
 function App() {
@@ -14,6 +15,7 @@ function App() {
             <Header />
               <Routes>
                 <Route path="/" element={<Home />} />
+                <Route path="/car/:id" element={<Car />} />
                 {/* <Route path="/login" element={<Login />} /> */}
                 {/* <Route path="/register" element={<Register />} /> */}
                 {/* <Route path="/admin/dashboard" element={<AdminDashboard />} /> */}

@@ -1,23 +1,16 @@
-import { CardHeader, CardTitle } from "../ui/card";
+import { CardHeader, CardTitle } from "@/components/shadcn/card";
 import CardItem from "@/components/car/CarItem";
 import { Link } from "react-router-dom";
 import { ArrowLeftRight } from "lucide-react";
-import { Button } from "../ui/button";
+import { Button } from "@/components/shadcn/button";
 import { type Car } from "@rental-app/shared"; 
 
 type Props = {
   cars: Car[]; 
-  loading: boolean;
 }
 
-const CarList = ({ cars, loading }: Props) => {
-  if(loading) {
-    return (
-      <div className="flex items-center justify-center h-full">
-        <p className="text-gray-500">Loading cars...</p>
-      </div>
-    );
-  }
+const CarList = ({ cars }: Props) => {
+
   
   return (
     <>

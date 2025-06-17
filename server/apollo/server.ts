@@ -1,4 +1,5 @@
 import { Application, json } from "express";
+import cors from "cors";
 import { makeExecutableSchema } from "@graphql-tools/schema";
 import { ApolloServer } from "@apollo/server";
 import { expressMiddleware } from '@as-integrations/express5';
@@ -23,6 +24,10 @@ export async function startApolloServer(app: Application) {
 
   app.use(
     "/graphql",
+    cors({
+      origin:[ "http://localhost:5173"], 
+      credentials: true,
+    }),
     json(),
     expressMiddleware(apolloServer)
   )

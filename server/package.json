@@ -4,6 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "devDependencies": {
+    "@types/cors": "^2.8.19",
     "@types/express": "^5.0.2",
     "nodemon": "^3.1.10",
     "ts-node": "^10.9.2",
@@ -14,6 +15,7 @@
     "@as-integrations/express5": "^1.0.0",
     "@graphql-tools/schema": "^10.0.23",
     "@rental-app/shared": "file:../shared",
+    "cors": "^2.8.5",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
     "graphql": "^16.11.0",

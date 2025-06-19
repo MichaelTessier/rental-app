@@ -1,5 +1,5 @@
-import Car from "../models/car.models";
-import { CarInput } from "../types/car.types";
+import { CarInput } from "../__generated__/graphql";
+import Car from "./car.models";
 
 export const carList = async () => {
   const cars = await Car.find();

@@ -3,14 +3,17 @@ import { Button } from "@/components/shadcn/button";
 import { Badge } from "@/components/shadcn/badge";
 import { Link } from "react-router-dom";
 import { CarFront, CircleDot, MoveRight } from "lucide-react";
-import type { Car } from "@rental-app/shared";
 import StarRatings from 'react-star-ratings';
+import { CarListFragment } from "@/graphql/queries/car.queries";
+import { FragmentType, useFragment } from "@/__generated__";
 
 type Props = {
-  car: Car
+  car: FragmentType<typeof CarListFragment>
 }
 
-const CardItem = ({car}: Props) => {
+const CardItem = (props: Props) => {
+  const car = useFragment(CarListFragment, props.car);
+  
   return (
     <Card className="m-2 my-4 p-0">
       <div className="flex items-center">
@@ -46,7 +49,7 @@ const CardItem = ({car}: Props) => {
           </div>
           <div className="flex items-center my-2">
             <StarRatings
-              rating={car.ratings.value}
+              rating={car?.ratings?.value}
               starRatedColor="orange"
               numberOfStars={5}
               name='rating'

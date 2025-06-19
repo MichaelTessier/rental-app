@@ -3,14 +3,15 @@ import CardItem from "@/components/car/CarItem";
 import { Link } from "react-router-dom";
 import { ArrowLeftRight } from "lucide-react";
 import { Button } from "@/components/shadcn/button";
-import { type Car } from "@rental-app/shared"; 
+import { CarListFragment } from "@/graphql/queries/car.queries";
+import { FragmentType } from "@/__generated__";
+
 
 type Props = {
-  cars: Car[]; 
+  cars: FragmentType<typeof CarListFragment>[]; 
 }
 
 const CarList = ({ cars }: Props) => {
-
   
   return (
     <>
@@ -28,8 +29,8 @@ const CarList = ({ cars }: Props) => {
         </div>
       </CardHeader>
       <div className="text-sm text-muted-foreground">
-        { cars.length && cars.map((car) => (
-          <CardItem key={car.id} car={car} />
+        { cars?.length && cars.map((car, idx) => (
+          <CardItem key={idx} car={car} />
         )) }
       </div>
     </>

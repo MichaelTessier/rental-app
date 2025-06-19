@@ -1,5 +1,5 @@
 import { connectToDatabase } from "../services/mongoose/mongoose.service";
-import Car from "../models/car.models";
+import Car from "../api/car/car.models";
 import { cars } from "./cars";
 
 const seedCars = async () => {

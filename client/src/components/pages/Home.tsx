@@ -1,12 +1,10 @@
-// import Filters from "./layout/Filters";
 import CarList from "@/components/car/CarList";
-import { GET_CARS } from "@/graphql/queries/car.queries";
+import {  getCars } from "@/graphql/queries/car.queries";
 import { useQuery } from "@apollo/client";
 import Loader from "@/components/ui/Loader";
-// import { LoadingSpinner } from "./layout/LoadingSpinner";
 
 const Home = () => {
-  const {data, loading} = useQuery(GET_CARS)
+  const {data, loading} = useQuery(getCars)
 
   if(loading) {
     return <Loader fullScreen={true}/>;
@@ -17,9 +15,11 @@ const Home = () => {
       <div className="md:col-span-2 lg:col-span-2 flex flex-col">
         {/* <Filters /> */}
       </div>
-      <div className="grid auto-rows-max items-start gap-4 md:gap-8 md:col-span-4 lg:col-span-4 flex flex-col">
-        <CarList cars={data?.cars}/>
-      </div>
+      {data?.cars && (
+        <div className="grid auto-rows-max items-start gap-4 md:gap-8 md:col-span-4 lg:col-span-4">
+          <CarList cars={data.cars}/>
+        </div>
+      )}
       <div className="md:col-span-6 lg:col-span-4 flex flex-col">
         {/* <div className="flex items-center justify-center h-screen"></div> */}
         {/* Google Map Component */}

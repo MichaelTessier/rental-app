@@ -2,7 +2,6 @@ import { Card, CardHeader, CardTitle } from "@/components/shadcn/card";
 import { DropdownMenuSeparator } from "@/components/shadcn/dropdown-menu";
 import { MapPin } from "lucide-react";
 import { Badge } from "@/components/shadcn/badge";
-import type { Car } from "@rental-app/shared";
 // import { CustomBreadcrumb } from "../layout/BreadCrumbs";
 // import { BookingForm } from "../booking/BookingForm";
 import CarFeatures from "./CarFeatures";
@@ -10,12 +9,15 @@ import CarFeatures from "./CarFeatures";
 import CarCarousel from "./CarCarousel";
 import CarFaq from "./CarFaq";
 import StarRatings from 'react-star-ratings';
+import { CarFragment } from "@/graphql/queries/car.queries";
+import { FragmentType, useFragment } from "@/__generated__";
 
 type Props = {
-  car: Car;
+  car: FragmentType<typeof CarFragment>;
 }
 
-const CarDetails = ({ car }: Props) => {
+const CarDetails = (props: Props) => {
+  const car = useFragment(CarFragment, props.car);
 
   return (
     <div className="container">
@@ -31,7 +33,9 @@ const CarDetails = ({ car }: Props) => {
                   </Badge>
                 </CardTitle>
                 <div className="text-sm text-muted-foreground">
-                  <CarCarousel images={car.images}/>
+                  { car.images?.length && (
+                    <CarCarousel images={car.images}/>
+                  )}
                   <div className="px-8 mt-5">
                     <h1 className="text-3xl font-bold">{car.name}</h1>
 
@@ -41,7 +45,7 @@ const CarDetails = ({ car }: Props) => {
 
                     <div className="flex items-center my-5">
                       <StarRatings
-                        rating={car.ratings.value}
+                        rating={car.ratings?.value}
                         starRatedColor="orange"
                         numberOfStars={5}
                         name='rating'
@@ -49,11 +53,11 @@ const CarDetails = ({ car }: Props) => {
                         starSpacing="2px"
                       />
                       <p className="ms-2 text-sm font-bold text-gray-900 dark:text-white">
-                        {car.ratings.value}
+                        {car.ratings?.value}
                       </p>
                       <span className="w-1 h-1 mx-1.5 bg-gray-500 rounded-full dark:bg-gray-400"></span>
                       <p className="text-sm font-medium text-gray-900 underline hover:no-underline dark:text-white">
-                        {car.ratings.count} reviews
+                        {car.ratings?.count} reviews
                       </p>
                     </div>
 

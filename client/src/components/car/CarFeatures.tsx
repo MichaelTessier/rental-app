@@ -1,7 +1,7 @@
 import { Card, CardHeader, CardTitle } from "@/components/shadcn/card";
 import { BatteryFull, CalendarDays, CarFront, Cog, DoorClosed, Fuel, Milestone, RockingChair, Type } from "lucide-react";
 import { Button } from "@/components/shadcn/button";
-import type { Car } from "@rental-app/shared";
+import type { Car } from "@/__generated__/graphql";
 
 type Props = {
   car: Car

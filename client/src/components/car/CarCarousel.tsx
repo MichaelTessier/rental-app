@@ -1,6 +1,5 @@
 import * as React from "react";
 import Autoplay from "embla-carousel-autoplay";
-
 import { Card } from "@/components/shadcn/card";
 import {
   Carousel,
@@ -9,7 +8,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/shadcn/carousel";
-import type { Image } from "@rental-app/shared";
+import type { Image } from "@/__generated__/graphql";
 
 type Props = {
   images: Image[]

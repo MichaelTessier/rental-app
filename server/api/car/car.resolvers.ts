@@ -1,16 +1,15 @@
+import { CarInput, MutationCreateCarArgs, MutationDeleteCarArgs, MutationUpdateCarArgs, QueryCarArgs } from "../__generated__/graphql";
 import { carById, carList, createCar, deleteCar, updateCar } from "./car.controllers";
-import { CarInput } from "./car.types";
 
 export const carResolvers = {
-
   Query: {
-    cars: async (_: any) => await carList(),
-    car: async (_: any, { id }: { id: string }) => await carById(id)
+    cars: async () => await carList(),
+    car: async (_root: {}, args: QueryCarArgs) => await carById(args.id)
   },
 
   Mutation: {
-    createCar: async (_:any, {input}: { input: CarInput}) => await createCar(input),
-    updateCar: async (_: any, { id, input }: { id: string, input: CarInput }) => await updateCar(id, input),
-    deleteCar: async (_: any, { id }: { id: string }) => await deleteCar(id)
+    createCar: async (_root: {}, args: MutationCreateCarArgs) => await createCar(args.input),
+    updateCar: async (_root: {}, args: MutationUpdateCarArgs) => await updateCar(args.id, args.input),
+    deleteCar: async (_root: {}, args: MutationDeleteCarArgs) => await deleteCar(args.id)
   }
 }

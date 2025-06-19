@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { Car, CarBrand, CarCategory, CarDoors, CarFuelType, CarSeats, CarStatus, CarTransmission } from "@rental-app/shared"
+import { Car, CarStatus, CarBrand, CarCategory, CarDoors, CarFuelType, CarSeats, CarTransmission } from "../__generated__/graphql";
 
 const carSchema = new mongoose.Schema<Car>({
   name: {
@@ -61,7 +61,7 @@ const carSchema = new mongoose.Schema<Car>({
     required: [true, "Car power is required"],
   },
   seats: {
-    type: Number,
+    type: String,
     required: [true, "Car seats count is required"],
     enum: {
       values: Object.values(CarSeats),
@@ -69,7 +69,7 @@ const carSchema = new mongoose.Schema<Car>({
     }
   },
   doors: {
-    type: Number,
+    type: String,
     required: [true, "Car door count is required"],
     enum: {
       values: Object.values(CarDoors),

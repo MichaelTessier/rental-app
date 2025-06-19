@@ -2,7 +2,7 @@ import { gql } from 'graphql-tag'
 
 export const carTypeDefs = gql`
   type Query {
-    cars: [Car]
+    cars: [Car!]
     car(id: String!): Car
   } 
 
@@ -16,49 +16,98 @@ export const carTypeDefs = gql`
     id: ID!
     name: String!
     description: String!
-    status: String!
+    status: CarStatus!
     rentPerDay: Float!
     address: String!
     year: Int!
     power: Int!
     millage: Int!
-    brand: String!
-    transmission: String!
-    fuelType: String!
-    seats: Int!
-    doors: Int!
-    category: String!
+    brand: CarBrand!
+    transmission: CarTransmission!
+    fuelType: CarFuelType!
+    seats: CarSeats!
+    doors: CarDoors!
+    category: CarCategory!
     images: [Image!]
     createdAt: String!
     updatedAt: String!
     ratings: Ratings
+    reviews: [String!]
   }
 
   input CarInput {
     name: String!
     description: String!
-    status: String
+    status: CarStatus
     rentPerDay: Float!
     address: String!
-    images: [String!]
-    brand: String!
+    images: [ImageInput!]
+    brand: CarBrand!
     year: Int!
-    transmission: String!
+    transmission: CarTransmission!
     millage: Int!
     power: Int!
-    seats: Int!
-    doors: Int!
-    fuelType: String!
-    category: String!
+    seats: CarSeats!
+    doors: CarDoors!
+    fuelType: CarFuelType!
+    category: CarCategory!
   }
 
-  type Image {
-    url: String!
-    publicId: String!
+  enum CarStatus {
+    Draft
+    Published
+    Archived
   }
 
-  type Ratings {
-    count: Int!
-    value: Float!
+  enum CarBrand {
+    Toyota
+    Honda
+    Ford
+    BMW
+    Mercedes
+    Audi
+    Volkswagen
+    Hyundai
+    Nissan
+    Chevrolet
+  }
+
+  enum CarCategory {
+    Sedan
+    SUV
+    Hatchback
+    Coupe
+    Convertible
+    Minivan
+    Pickup
+  }
+
+  enum CarTransmission {
+    Manual
+    Automatic
+    SemiAutomatic
+    Electric
+  }
+
+  enum CarFuelType {
+    Petrol
+    Diesel
+    Electric
+    Hybrid
+  }
+
+  enum CarDoors {
+    Two
+    Three
+    Four
+    Five
+  }
+
+  enum CarSeats {
+    Two
+    Four
+    Five
+    Six
+    Seven
   }
 `

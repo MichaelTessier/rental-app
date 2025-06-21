@@ -127,7 +127,15 @@ export enum CarTransmission {
 
 export type CarsInput = {
   filters?: InputMaybe<CarFiltersInput>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  page?: InputMaybe<Scalars['Int']['input']>;
   query?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type CarsOutput = {
+  __typename?: 'CarsOutput';
+  cars: Array<Car>;
+  pagination: Pagination;
 };
 
 export type Image = {
@@ -164,10 +172,17 @@ export type MutationUpdateCarArgs = {
   input: CarInput;
 };
 
+export type Pagination = {
+  __typename?: 'Pagination';
+  limit: Scalars['Int']['output'];
+  page: Scalars['Int']['output'];
+  total: Scalars['Int']['output'];
+};
+
 export type Query = {
   __typename?: 'Query';
   car?: Maybe<Car>;
-  cars?: Maybe<Array<Car>>;
+  cars?: Maybe<CarsOutput>;
 };
 
 
@@ -274,12 +289,14 @@ export type ResolversTypes = {
   CarStatus: CarStatus;
   CarTransmission: CarTransmission;
   CarsInput: CarsInput;
+  CarsOutput: ResolverTypeWrapper<CarsOutput>;
   Float: ResolverTypeWrapper<Scalars['Float']['output']>;
   ID: ResolverTypeWrapper<Scalars['ID']['output']>;
   Image: ResolverTypeWrapper<Image>;
   ImageInput: ImageInput;
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
   Mutation: ResolverTypeWrapper<{}>;
+  Pagination: ResolverTypeWrapper<Pagination>;
   Query: ResolverTypeWrapper<{}>;
   Ratings: ResolverTypeWrapper<Ratings>;
   RentPerDayInput: RentPerDayInput;
@@ -293,12 +310,14 @@ export type ResolversParentTypes = {
   CarFiltersInput: CarFiltersInput;
   CarInput: CarInput;
   CarsInput: CarsInput;
+  CarsOutput: CarsOutput;
   Float: Scalars['Float']['output'];
   ID: Scalars['ID']['output'];
   Image: Image;
   ImageInput: ImageInput;
   Int: Scalars['Int']['output'];
   Mutation: {};
+  Pagination: Pagination;
   Query: {};
   Ratings: Ratings;
   RentPerDayInput: RentPerDayInput;
@@ -329,6 +348,12 @@ export type CarResolvers<ContextType = any, ParentType extends ResolversParentTy
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type CarsOutputResolvers<ContextType = any, ParentType extends ResolversParentTypes['CarsOutput'] = ResolversParentTypes['CarsOutput']> = {
+  cars?: Resolver<Array<ResolversTypes['Car']>, ParentType, ContextType>;
+  pagination?: Resolver<ResolversTypes['Pagination'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type ImageResolvers<ContextType = any, ParentType extends ResolversParentTypes['Image'] = ResolversParentTypes['Image']> = {
   publicId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   url?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -341,9 +366,16 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   updateCar?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationUpdateCarArgs, 'id' | 'input'>>;
 };
 
+export type PaginationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Pagination'] = ResolversParentTypes['Pagination']> = {
+  limit?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  page?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  total?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   car?: Resolver<Maybe<ResolversTypes['Car']>, ParentType, ContextType, RequireFields<QueryCarArgs, 'id'>>;
-  cars?: Resolver<Maybe<Array<ResolversTypes['Car']>>, ParentType, ContextType, Partial<QueryCarsArgs>>;
+  cars?: Resolver<Maybe<ResolversTypes['CarsOutput']>, ParentType, ContextType, Partial<QueryCarsArgs>>;
 };
 
 export type RatingsResolvers<ContextType = any, ParentType extends ResolversParentTypes['Ratings'] = ResolversParentTypes['Ratings']> = {
@@ -354,8 +386,10 @@ export type RatingsResolvers<ContextType = any, ParentType extends ResolversPare
 
 export type Resolvers<ContextType = any> = {
   Car?: CarResolvers<ContextType>;
+  CarsOutput?: CarsOutputResolvers<ContextType>;
   Image?: ImageResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
+  Pagination?: PaginationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   Ratings?: RatingsResolvers<ContextType>;
 };

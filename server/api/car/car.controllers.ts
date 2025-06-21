@@ -1,16 +1,20 @@
-import { Car, CarInput, CarsInput, Maybe } from "@/api/__generated__/graphql";
-import QueryService from "@/api/services/query.service";
+import { Car, CarInput, CarsInput, CarsOutput, Maybe } from "../__generated__/graphql";
+import QueryService from "../services/query.service";
 import CarModel from "./car.models";
 import { toFilterQuery } from "./car.utils";
 
 
-export const carList = async (args: Maybe<CarsInput> | undefined) => {
+export const carList = async (args: Maybe<CarsInput> | undefined): Promise<CarsOutput> => {
   const queryService = new QueryService<Car>(CarModel);
   
-  await queryService.search(args?.query).filters(toFilterQuery(args?.filters));
-  const cars = queryService.response;
+  await queryService.search(args?.query).filters(toFilterQuery(args?.filters)).paginate(args?.page, args?.limit)
 
-  return cars
+  const cars = await queryService.response;
+
+  return { 
+    cars,
+    pagination: queryService.pagination
+  }
 }
 
 export const createCar = async (car: CarInput) => {

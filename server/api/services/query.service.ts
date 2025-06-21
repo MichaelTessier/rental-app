@@ -1,9 +1,26 @@
 import mongoose, { FilterQuery, Model, Query } from "mongoose"
 import { Maybe } from "../__generated__/graphql"
 
+type Pagination = {
+  total: number
+  page: number
+  limit: number
+}
+
+const PAGINATION = {
+  LIMIT: 10,
+  DEFAULT_PAGE: 1,
+  TOTAL: 0,
+} as const
+
 class QueryService<T> {
   model: Model<T>
   response: Query<T[], T>
+  pagination: Pagination = {
+    total: PAGINATION.TOTAL,
+    page: PAGINATION.DEFAULT_PAGE,
+    limit: PAGINATION.LIMIT,
+  }
 
   constructor(model: Model<T>) {
     this.model = model
@@ -35,6 +52,27 @@ class QueryService<T> {
     if(!filters) return this
 
     this.response = this.model.find({ ...filters })
+
+    return this
+  }
+
+  async paginate(page: Maybe<number> = PAGINATION.DEFAULT_PAGE, limit: Maybe<number> = PAGINATION.LIMIT): Promise<this> {
+
+    if((!page) || !limit) return this
+
+    const skip = (page - 1) * limit;
+
+    if(skip < 0) return this
+
+    const totalCount = await this.response.clone().countDocuments()
+
+    this.response = this.response.skip(skip).limit(limit)
+
+    this.pagination = {
+      total: totalCount,
+      page: page,
+      limit: limit,
+    }
 
     return this
   }

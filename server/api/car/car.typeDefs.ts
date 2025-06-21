@@ -2,7 +2,7 @@ import { gql } from 'graphql-tag'
 
 export const carTypeDefs = gql`
   type Query {
-    cars: [Car!]
+    cars(input: CarsInput): [Car!]
     car(id: String!): Car
   } 
 
@@ -51,6 +51,25 @@ export const carTypeDefs = gql`
     doors: CarDoors!
     fuelType: CarFuelType!
     category: CarCategory!
+  }
+
+  input CarsInput {
+    query: String
+    filters: CarFiltersInput
+  }
+
+  input CarFiltersInput {
+    brand: CarBrand
+    category: CarCategory
+    transmission: CarTransmission
+    fuelType: CarFuelType
+    status: CarStatus
+    rentPerDay: RentPerDayInput
+  }
+
+  input RentPerDayInput {
+    min: Int
+    max: Int
   }
 
   enum CarStatus {

@@ -70,6 +70,15 @@ export enum CarDoors {
   Two = 'Two'
 }
 
+export type CarFiltersInput = {
+  brand?: InputMaybe<CarBrand>;
+  category?: InputMaybe<CarCategory>;
+  fuelType?: InputMaybe<CarFuelType>;
+  rentPerDay?: InputMaybe<RentPerDayInput>;
+  status?: InputMaybe<CarStatus>;
+  transmission?: InputMaybe<CarTransmission>;
+};
+
 export enum CarFuelType {
   Diesel = 'Diesel',
   Electric = 'Electric',
@@ -116,6 +125,11 @@ export enum CarTransmission {
   SemiAutomatic = 'SemiAutomatic'
 }
 
+export type CarsInput = {
+  filters?: InputMaybe<CarFiltersInput>;
+  query?: InputMaybe<Scalars['String']['input']>;
+};
+
 export type Image = {
   __typename?: 'Image';
   publicId: Scalars['String']['output'];
@@ -161,10 +175,20 @@ export type QueryCarArgs = {
   id: Scalars['String']['input'];
 };
 
+
+export type QueryCarsArgs = {
+  input?: InputMaybe<CarsInput>;
+};
+
 export type Ratings = {
   __typename?: 'Ratings';
   count: Scalars['Int']['output'];
   value: Scalars['Float']['output'];
+};
+
+export type RentPerDayInput = {
+  max?: InputMaybe<Scalars['Int']['input']>;
+  min?: InputMaybe<Scalars['Int']['input']>;
 };
 
 
@@ -243,11 +267,13 @@ export type ResolversTypes = {
   CarBrand: CarBrand;
   CarCategory: CarCategory;
   CarDoors: CarDoors;
+  CarFiltersInput: CarFiltersInput;
   CarFuelType: CarFuelType;
   CarInput: CarInput;
   CarSeats: CarSeats;
   CarStatus: CarStatus;
   CarTransmission: CarTransmission;
+  CarsInput: CarsInput;
   Float: ResolverTypeWrapper<Scalars['Float']['output']>;
   ID: ResolverTypeWrapper<Scalars['ID']['output']>;
   Image: ResolverTypeWrapper<Image>;
@@ -256,6 +282,7 @@ export type ResolversTypes = {
   Mutation: ResolverTypeWrapper<{}>;
   Query: ResolverTypeWrapper<{}>;
   Ratings: ResolverTypeWrapper<Ratings>;
+  RentPerDayInput: RentPerDayInput;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
 };
 
@@ -263,7 +290,9 @@ export type ResolversTypes = {
 export type ResolversParentTypes = {
   Boolean: Scalars['Boolean']['output'];
   Car: Car;
+  CarFiltersInput: CarFiltersInput;
   CarInput: CarInput;
+  CarsInput: CarsInput;
   Float: Scalars['Float']['output'];
   ID: Scalars['ID']['output'];
   Image: Image;
@@ -272,6 +301,7 @@ export type ResolversParentTypes = {
   Mutation: {};
   Query: {};
   Ratings: Ratings;
+  RentPerDayInput: RentPerDayInput;
   String: Scalars['String']['output'];
 };
 
@@ -313,7 +343,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   car?: Resolver<Maybe<ResolversTypes['Car']>, ParentType, ContextType, RequireFields<QueryCarArgs, 'id'>>;
-  cars?: Resolver<Maybe<Array<ResolversTypes['Car']>>, ParentType, ContextType>;
+  cars?: Resolver<Maybe<Array<ResolversTypes['Car']>>, ParentType, ContextType, Partial<QueryCarsArgs>>;
 };
 
 export type RatingsResolvers<ContextType = any, ParentType extends ResolversParentTypes['Ratings'] = ResolversParentTypes['Ratings']> = {

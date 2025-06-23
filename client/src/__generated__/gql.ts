@@ -15,13 +15,13 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  */
 type Documents = {
     "\n  fragment CarList on Car {\n    name\n    category\n    fuelType\n    images {\n      url\n      publicId\n    }\n    id\n    rentPerDay\n    transmission\n    ratings {\n      count\n      value\n    }\n  }\n": typeof types.CarListFragmentDoc,
-    "\n  query getCars {\n    cars {\n      ...CarList\n    }\n  }\n": typeof types.GetCarsDocument,
+    "\n  query getCars($input: CarsInput) {\n    cars(input: $input) {\n      items {\n        ...CarList\n      }\n    }\n  }\n": typeof types.GetCarsDocument,
     "\n  fragment Car on Car {\n    id\n    name\n    description\n    status\n    rentPerDay\n    address\n    year\n    power\n    millage\n    brand\n    transmission\n    fuelType\n    seats\n    doors\n    category\n    images {\n      url\n      publicId\n    }\n    createdAt\n    updatedAt\n    ratings {\n      count\n      value\n    }\n  }\n": typeof types.CarFragmentDoc,
     "\n  query getCar($id: String!) {\n    car(id: $id) {\n      ...Car\n    }\n  }\n": typeof types.GetCarDocument,
 };
 const documents: Documents = {
     "\n  fragment CarList on Car {\n    name\n    category\n    fuelType\n    images {\n      url\n      publicId\n    }\n    id\n    rentPerDay\n    transmission\n    ratings {\n      count\n      value\n    }\n  }\n": types.CarListFragmentDoc,
-    "\n  query getCars {\n    cars {\n      ...CarList\n    }\n  }\n": types.GetCarsDocument,
+    "\n  query getCars($input: CarsInput) {\n    cars(input: $input) {\n      items {\n        ...CarList\n      }\n    }\n  }\n": types.GetCarsDocument,
     "\n  fragment Car on Car {\n    id\n    name\n    description\n    status\n    rentPerDay\n    address\n    year\n    power\n    millage\n    brand\n    transmission\n    fuelType\n    seats\n    doors\n    category\n    images {\n      url\n      publicId\n    }\n    createdAt\n    updatedAt\n    ratings {\n      count\n      value\n    }\n  }\n": types.CarFragmentDoc,
     "\n  query getCar($id: String!) {\n    car(id: $id) {\n      ...Car\n    }\n  }\n": types.GetCarDocument,
 };
@@ -47,7 +47,7 @@ export function gql(source: "\n  fragment CarList on Car {\n    name\n    catego
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "\n  query getCars {\n    cars {\n      ...CarList\n    }\n  }\n"): (typeof documents)["\n  query getCars {\n    cars {\n      ...CarList\n    }\n  }\n"];
+export function gql(source: "\n  query getCars($input: CarsInput) {\n    cars(input: $input) {\n      items {\n        ...CarList\n      }\n    }\n  }\n"): (typeof documents)["\n  query getCars($input: CarsInput) {\n    cars(input: $input) {\n      items {\n        ...CarList\n      }\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

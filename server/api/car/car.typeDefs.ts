@@ -19,7 +19,7 @@ export const carTypeDefs = gql`
   }
 
   type CarsOutput {
-    cars: [Car!]!
+    items: [Car!]!
     pagination: Pagination!
   }
 

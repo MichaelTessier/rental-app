@@ -134,7 +134,7 @@ export type CarsInput = {
 
 export type CarsOutput = {
   __typename?: 'CarsOutput';
-  cars: Array<Car>;
+  items: Array<Car>;
   pagination: Pagination;
 };
 
@@ -349,7 +349,7 @@ export type CarResolvers<ContextType = any, ParentType extends ResolversParentTy
 };
 
 export type CarsOutputResolvers<ContextType = any, ParentType extends ResolversParentTypes['CarsOutput'] = ResolversParentTypes['CarsOutput']> = {
-  cars?: Resolver<Array<ResolversTypes['Car']>, ParentType, ContextType>;
+  items?: Resolver<Array<ResolversTypes['Car']>, ParentType, ContextType>;
   pagination?: Resolver<ResolversTypes['Pagination'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };

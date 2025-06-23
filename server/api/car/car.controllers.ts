@@ -12,7 +12,7 @@ export const carList = async (args: Maybe<CarsInput> | undefined): Promise<CarsO
   const cars = await queryService.response;
 
   return { 
-    cars,
+    items: cars,
     pagination: queryService.pagination
   }
 }

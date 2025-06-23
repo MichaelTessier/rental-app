@@ -44,21 +44,23 @@ class QueryService<T> {
     const searchQuery = mongoose.isValidObjectId(query) ? searchById : searchByName
 
     this.response = this.model.find({ ...searchQuery })
-
+    
     return this
   }
 
   filters(filters: FilterQuery<Model<T>> | undefined): this {
-    if(!filters) return this
-
+    if(!filters || !Object.keys(filters).length) return this
+    
     this.response = this.model.find({ ...filters })
 
     return this
   }
 
   async paginate(page: Maybe<number> = PAGINATION.DEFAULT_PAGE, limit: Maybe<number> = PAGINATION.LIMIT): Promise<this> {
+    const isValidPage = page && Number.isInteger(page) && page > 0
+    const isValidLimit = limit && Number.isInteger(limit) && limit > 0
 
-    if((!page) || !limit) return this
+    if(!isValidPage || !isValidLimit) return this
 
     const skip = (page - 1) * limit;
 

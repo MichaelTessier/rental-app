@@ -9,15 +9,13 @@ import CarFeatures from "./CarFeatures";
 import CarCarousel from "./CarCarousel";
 import CarFaq from "./CarFaq";
 import StarRatings from 'react-star-ratings';
-import { CarFragment } from "@/graphql/queries/car.queries";
-import { FragmentType, useFragment } from "@/__generated__";
+import { CarFragment } from "@/graphql/__generated__/types";
 
 type Props = {
-  car: FragmentType<typeof CarFragment>;
+  car: CarFragment;
 }
 
-const CarDetails = (props: Props) => {
-  const car = useFragment(CarFragment, props.car);
+const CarDetails = ({ car }: Props) => {
 
   return (
     <div className="container">

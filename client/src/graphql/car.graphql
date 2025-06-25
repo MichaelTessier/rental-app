@@ -1,0 +1,67 @@
+query getCars($input: CarsInput) {
+  cars(input: $input) {
+    items {
+      ...CarList
+    }
+    pagination {
+      ...Pagination
+    }
+  }
+}
+
+query getCar($id: String!) {
+  car(id: $id) {
+    ...Car
+  }
+}
+
+fragment CarList on Car {
+  name
+  category
+  fuelType
+  images {
+    url
+    publicId
+  }
+  id
+  rentPerDay
+  transmission
+  ratings {
+    count
+    value
+  }
+}
+
+fragment Pagination on Pagination {
+  total
+  page
+  limit
+}
+
+fragment Car on Car {
+  id
+  name
+  description
+  status
+  rentPerDay
+  address
+  year
+  power
+  millage
+  brand
+  transmission
+  fuelType
+  seats
+  doors
+  category
+  images {
+    url
+    publicId
+  }
+  createdAt
+  updatedAt
+  ratings {
+    count
+    value
+  }
+}

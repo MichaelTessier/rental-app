@@ -2,7 +2,7 @@ import { Card, CardHeader } from "../shadcn/card";
 import { Checkbox } from "../shadcn/checkbox";
 import { Search } from "lucide-react";
 import { Input } from "../shadcn/input";
-import { CarBrand, CarCategory, CarTransmission } from "@/__generated__/graphql";
+import { CarBrand, CarCategory, CarTransmission } from "@/graphql/__generated__/types";
 import { useState } from "react";
 import { useUrlSearchParams } from "@/hooks/useUrlSearchParams";
 

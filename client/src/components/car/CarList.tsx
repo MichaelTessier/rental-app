@@ -3,16 +3,28 @@ import CardItem from "@/components/car/CarItem";
 import { Link } from "react-router-dom";
 import { ArrowLeftRight } from "lucide-react";
 import { Button } from "@/components/shadcn/button";
-import { CarListFragment } from "@/graphql/queries/car.queries";
-import { FragmentType } from "@/__generated__";
+import { CarListFragment, PaginationFragment } from "@/graphql/queries/car.queries";
+import { FragmentType, useFragment } from "@/__generated__";
+import Paginator from "../layout/Paginator";
+import { useUrlSearchParams } from "@/hooks/useUrlSearchParams";
 
 
 type Props = {
   cars: FragmentType<typeof CarListFragment>[]; 
+  pagination?: FragmentType<typeof PaginationFragment>;
 }
 
-const CarList = ({ cars }: Props) => {
-  
+const CarList = ( props: Props) => {
+  const pagination = useFragment(PaginationFragment, props.pagination);
+  console.log("🚀 ~ CarList ~ pagination:", pagination)
+
+
+  const [urlSearchParams, setUrlSearchParams] = useUrlSearchParams()
+
+  function handlePageChange(page: number) {
+    setUrlSearchParams(urlSearchParams, 'page', page.toString()); 
+  }
+
   return (
     <>
       <CardHeader className="p-0">
@@ -29,10 +41,12 @@ const CarList = ({ cars }: Props) => {
         </div>
       </CardHeader>
       <div className="text-sm text-muted-foreground">
-        { cars?.length && cars.map((car, idx) => (
+        { props.cars?.length ? props.cars.map((car, idx) => (
           <CardItem key={idx} car={car} />
-        )) }
+        )) : <p>No cars found.</p> }
       </div>
+
+      <Paginator onPageChange={(page) => handlePageChange(page)} totalItems={pagination?.total} initialPage={pagination?.page} limit={pagination?.limit} />
     </>
   );
 };

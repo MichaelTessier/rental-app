@@ -2,7 +2,7 @@ import { gql } from 'graphql-tag'
 
 export const carTypeDefs = gql`
   type Query {
-    cars: [Car!]
+    cars(input: CarsInput): CarsOutput
     car(id: String!): Car
   } 
 
@@ -10,6 +10,17 @@ export const carTypeDefs = gql`
     createCar(input: CarInput!): Car
     updateCar(id: String!, input: CarInput!): Boolean
     deleteCar(id: String!): Boolean
+  }
+
+  type Pagination {
+    total: Int!
+    page: Int!
+    limit: Int!
+  }
+
+  type CarsOutput {
+    items: [Car!]!
+    pagination: Pagination!
   }
 
   type Car {
@@ -51,6 +62,27 @@ export const carTypeDefs = gql`
     doors: CarDoors!
     fuelType: CarFuelType!
     category: CarCategory!
+  }
+
+  input CarsInput {
+    query: String
+    filters: CarFiltersInput
+    page: Int
+    limit: Int
+  }
+
+  input CarFiltersInput {
+    brand: CarBrand
+    category: CarCategory
+    transmission: CarTransmission
+    fuelType: CarFuelType
+    status: CarStatus
+    rentPerDay: RentPerDayInput
+  }
+
+  input RentPerDayInput {
+    min: Int
+    max: Int
   }
 
   enum CarStatus {

@@ -1,9 +1,9 @@
-import { CarInput, MutationCreateCarArgs, MutationDeleteCarArgs, MutationUpdateCarArgs, QueryCarArgs } from "../__generated__/graphql";
+import { CarInput, MutationCreateCarArgs, MutationDeleteCarArgs, MutationUpdateCarArgs, QueryCarArgs, QueryCarsArgs } from "../__generated__/graphql";
 import { carById, carList, createCar, deleteCar, updateCar } from "./car.controllers";
 
 export const carResolvers = {
   Query: {
-    cars: async () => await carList(),
+    cars: async (_root: {}, args: QueryCarsArgs) => await carList(args.input),
     car: async (_root: {}, args: QueryCarArgs) => await carById(args.id)
   },
 

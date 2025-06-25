@@ -70,6 +70,15 @@ export enum CarDoors {
   Two = 'Two'
 }
 
+export type CarFiltersInput = {
+  brand?: InputMaybe<CarBrand>;
+  category?: InputMaybe<CarCategory>;
+  fuelType?: InputMaybe<CarFuelType>;
+  rentPerDay?: InputMaybe<RentPerDayInput>;
+  status?: InputMaybe<CarStatus>;
+  transmission?: InputMaybe<CarTransmission>;
+};
+
 export enum CarFuelType {
   Diesel = 'Diesel',
   Electric = 'Electric',
@@ -116,6 +125,19 @@ export enum CarTransmission {
   SemiAutomatic = 'SemiAutomatic'
 }
 
+export type CarsInput = {
+  filters?: InputMaybe<CarFiltersInput>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  page?: InputMaybe<Scalars['Int']['input']>;
+  query?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type CarsOutput = {
+  __typename?: 'CarsOutput';
+  items: Array<Car>;
+  pagination: Pagination;
+};
+
 export type Image = {
   __typename?: 'Image';
   publicId: Scalars['String']['output'];
@@ -150,15 +172,27 @@ export type MutationUpdateCarArgs = {
   input: CarInput;
 };
 
+export type Pagination = {
+  __typename?: 'Pagination';
+  limit: Scalars['Int']['output'];
+  page: Scalars['Int']['output'];
+  total: Scalars['Int']['output'];
+};
+
 export type Query = {
   __typename?: 'Query';
   car?: Maybe<Car>;
-  cars?: Maybe<Array<Car>>;
+  cars?: Maybe<CarsOutput>;
 };
 
 
 export type QueryCarArgs = {
   id: Scalars['String']['input'];
+};
+
+
+export type QueryCarsArgs = {
+  input?: InputMaybe<CarsInput>;
 };
 
 export type Ratings = {
@@ -167,15 +201,27 @@ export type Ratings = {
   value: Scalars['Float']['output'];
 };
 
+export type RentPerDayInput = {
+  max?: InputMaybe<Scalars['Int']['input']>;
+  min?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type PaginationFragment = { __typename?: 'Pagination', total: number, page: number, limit: number } & { ' $fragmentName'?: 'PaginationFragment' };
+
 export type CarListFragment = { __typename?: 'Car', name: string, category: CarCategory, fuelType: CarFuelType, id: string, rentPerDay: number, transmission: CarTransmission, images?: Array<{ __typename?: 'Image', url: string, publicId: string }> | null, ratings?: { __typename?: 'Ratings', count: number, value: number } | null } & { ' $fragmentName'?: 'CarListFragment' };
 
-export type GetCarsQueryVariables = Exact<{ [key: string]: never; }>;
+export type GetCarsQueryVariables = Exact<{
+  input?: InputMaybe<CarsInput>;
+}>;
 
 
-export type GetCarsQuery = { __typename?: 'Query', cars?: Array<(
-    { __typename?: 'Car' }
-    & { ' $fragmentRefs'?: { 'CarListFragment': CarListFragment } }
-  )> | null };
+export type GetCarsQuery = { __typename?: 'Query', cars?: { __typename?: 'CarsOutput', items: Array<(
+      { __typename?: 'Car' }
+      & { ' $fragmentRefs'?: { 'CarListFragment': CarListFragment } }
+    )>, pagination: (
+      { __typename?: 'Pagination' }
+      & { ' $fragmentRefs'?: { 'PaginationFragment': PaginationFragment } }
+    ) } | null };
 
 export type CarFragment = { __typename?: 'Car', id: string, name: string, description: string, status: CarStatus, rentPerDay: number, address: string, year: number, power: number, millage: number, brand: CarBrand, transmission: CarTransmission, fuelType: CarFuelType, seats: CarSeats, doors: CarDoors, category: CarCategory, createdAt: string, updatedAt: string, images?: Array<{ __typename?: 'Image', url: string, publicId: string }> | null, ratings?: { __typename?: 'Ratings', count: number, value: number } | null } & { ' $fragmentName'?: 'CarFragment' };
 
@@ -189,7 +235,8 @@ export type GetCarQuery = { __typename?: 'Query', car?: (
     & { ' $fragmentRefs'?: { 'CarFragment': CarFragment } }
   ) | null };
 
+export const PaginationFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Pagination"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Pagination"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"total"}},{"kind":"Field","name":{"kind":"Name","value":"page"}},{"kind":"Field","name":{"kind":"Name","value":"limit"}}]}}]} as unknown as DocumentNode<PaginationFragment, unknown>;
 export const CarListFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"CarList"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Car"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"category"}},{"kind":"Field","name":{"kind":"Name","value":"fuelType"}},{"kind":"Field","name":{"kind":"Name","value":"images"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"url"}},{"kind":"Field","name":{"kind":"Name","value":"publicId"}}]}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"rentPerDay"}},{"kind":"Field","name":{"kind":"Name","value":"transmission"}},{"kind":"Field","name":{"kind":"Name","value":"ratings"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"count"}},{"kind":"Field","name":{"kind":"Name","value":"value"}}]}}]}}]} as unknown as DocumentNode<CarListFragment, unknown>;
 export const CarFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Car"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Car"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"rentPerDay"}},{"kind":"Field","name":{"kind":"Name","value":"address"}},{"kind":"Field","name":{"kind":"Name","value":"year"}},{"kind":"Field","name":{"kind":"Name","value":"power"}},{"kind":"Field","name":{"kind":"Name","value":"millage"}},{"kind":"Field","name":{"kind":"Name","value":"brand"}},{"kind":"Field","name":{"kind":"Name","value":"transmission"}},{"kind":"Field","name":{"kind":"Name","value":"fuelType"}},{"kind":"Field","name":{"kind":"Name","value":"seats"}},{"kind":"Field","name":{"kind":"Name","value":"doors"}},{"kind":"Field","name":{"kind":"Name","value":"category"}},{"kind":"Field","name":{"kind":"Name","value":"images"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"url"}},{"kind":"Field","name":{"kind":"Name","value":"publicId"}}]}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}},{"kind":"Field","name":{"kind":"Name","value":"ratings"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"count"}},{"kind":"Field","name":{"kind":"Name","value":"value"}}]}}]}}]} as unknown as DocumentNode<CarFragment, unknown>;
-export const GetCarsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"getCars"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"cars"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"CarList"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"CarList"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Car"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"category"}},{"kind":"Field","name":{"kind":"Name","value":"fuelType"}},{"kind":"Field","name":{"kind":"Name","value":"images"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"url"}},{"kind":"Field","name":{"kind":"Name","value":"publicId"}}]}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"rentPerDay"}},{"kind":"Field","name":{"kind":"Name","value":"transmission"}},{"kind":"Field","name":{"kind":"Name","value":"ratings"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"count"}},{"kind":"Field","name":{"kind":"Name","value":"value"}}]}}]}}]} as unknown as DocumentNode<GetCarsQuery, GetCarsQueryVariables>;
+export const GetCarsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"getCars"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"CarsInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"cars"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"items"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"CarList"}}]}},{"kind":"Field","name":{"kind":"Name","value":"pagination"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Pagination"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"CarList"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Car"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"category"}},{"kind":"Field","name":{"kind":"Name","value":"fuelType"}},{"kind":"Field","name":{"kind":"Name","value":"images"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"url"}},{"kind":"Field","name":{"kind":"Name","value":"publicId"}}]}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"rentPerDay"}},{"kind":"Field","name":{"kind":"Name","value":"transmission"}},{"kind":"Field","name":{"kind":"Name","value":"ratings"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"count"}},{"kind":"Field","name":{"kind":"Name","value":"value"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Pagination"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Pagination"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"total"}},{"kind":"Field","name":{"kind":"Name","value":"page"}},{"kind":"Field","name":{"kind":"Name","value":"limit"}}]}}]} as unknown as DocumentNode<GetCarsQuery, GetCarsQueryVariables>;
 export const GetCarDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"getCar"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"car"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Car"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Car"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Car"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"rentPerDay"}},{"kind":"Field","name":{"kind":"Name","value":"address"}},{"kind":"Field","name":{"kind":"Name","value":"year"}},{"kind":"Field","name":{"kind":"Name","value":"power"}},{"kind":"Field","name":{"kind":"Name","value":"millage"}},{"kind":"Field","name":{"kind":"Name","value":"brand"}},{"kind":"Field","name":{"kind":"Name","value":"transmission"}},{"kind":"Field","name":{"kind":"Name","value":"fuelType"}},{"kind":"Field","name":{"kind":"Name","value":"seats"}},{"kind":"Field","name":{"kind":"Name","value":"doors"}},{"kind":"Field","name":{"kind":"Name","value":"category"}},{"kind":"Field","name":{"kind":"Name","value":"images"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"url"}},{"kind":"Field","name":{"kind":"Name","value":"publicId"}}]}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}},{"kind":"Field","name":{"kind":"Name","value":"ratings"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"count"}},{"kind":"Field","name":{"kind":"Name","value":"value"}}]}}]}}]} as unknown as DocumentNode<GetCarQuery, GetCarQueryVariables>;

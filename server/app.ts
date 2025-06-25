@@ -30,4 +30,5 @@ app.listen(appConfig.port, async () => {
   )
 
   console.log(`Server is running on http://localhost:${appConfig.port}`)
+  console.log(`Apollo Server is running on http://localhost:${appConfig.port}/graphql`)
 })

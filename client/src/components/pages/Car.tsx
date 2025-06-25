@@ -1,22 +1,20 @@
-// import Filters from "./layout/Filters";
 import CarDetail from "@/components/car/CarDetail";
-import { getCar } from "@/graphql/queries/car.queries";
-import { useQuery } from "@apollo/client";
 import { useParams } from "react-router";
 import Loader from "@/components/ui/Loader";
+import { useGetCarQuery } from "@/graphql/__generated__/types";
 
 const Car = () => {
   const params = useParams()
 
-  const { data, loading } = useQuery(getCar, {
-    variables: { id: params?.id ?? '' },
-  })
-
+  const { data, loading } = useGetCarQuery({
+    variables: {
+      id: params?.id ?? ''
+    },
+  });
 
   if(loading) {
     return <Loader fullScreen={true} />;
   }
-  
   
   return (
     <main >

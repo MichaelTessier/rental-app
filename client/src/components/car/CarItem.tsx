@@ -4,15 +4,14 @@ import { Badge } from "@/components/shadcn/badge";
 import { Link } from "react-router-dom";
 import { CarFront, CircleDot, MoveRight } from "lucide-react";
 import StarRatings from 'react-star-ratings';
-import { CarListFragment } from "@/graphql/queries/car.queries";
-import { FragmentType, useFragment } from "@/__generated__";
+import { CarListFragment } from "@/graphql/__generated__/types";
+
 
 type Props = {
-  car: FragmentType<typeof CarListFragment>
+  car: CarListFragment; 
 }
 
-const CardItem = (props: Props) => {
-  const car = useFragment(CarListFragment, props.car);
+const CardItem = ({car}: Props) => {
   
   return (
     <Card className="m-2 my-4 p-0">

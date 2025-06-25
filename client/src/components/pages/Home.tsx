@@ -1,11 +1,9 @@
 import CarList from "@/components/car/CarList";
-import {  getCars } from "@/graphql/queries/car.queries";
-import { useQuery } from "@apollo/client";
 import Loader from "@/components/ui/Loader";
 import CarFilters from "../car/CarFilters";
 import { useUrlSearchParams } from "@/hooks/useUrlSearchParams";
-import { CarBrand, CarCategory, CarFiltersInput, CarStatus, CarTransmission } from "@/__generated__/graphql";
 import { isEnumValue } from "@/utils/object";
+import { CarBrand, CarCategory, CarFiltersInput, useGetCarsQuery , CarTransmission } from "@/graphql/__generated__/types";
 
 
 const Home = () => {
@@ -13,7 +11,6 @@ const Home = () => {
   
   const query = urlSearchParams.get('query') || '';
   const page = urlSearchParams.get('page') || '';
-  console.log("🚀 ~ Home ~ query:", query)
 
   const filters: CarFiltersInput = {
     brand: isEnumValue<typeof CarBrand>(urlSearchParams.get('brand') ?? '', CarBrand) ? urlSearchParams.get('brand') as CarBrand : undefined,
@@ -21,21 +18,21 @@ const Home = () => {
     transmission: isEnumValue<typeof CarTransmission>(urlSearchParams.get('transmission') ?? '', CarTransmission) ? urlSearchParams.get('transmission') as CarTransmission : undefined,
   }
   
-  const {data, loading} = useQuery(getCars, {
+  const { data, loading } = useGetCarsQuery({
     variables: {
-      input: {
-        query: query,
-        filters: {
-          // status: CarStatus.Published,
-          ...(filters.brand && { brand: filters.brand}),
-          ...(filters.category && { category: filters.category}),
-          ...(filters.transmission && { transmission: filters.transmission}),
-        },
-        page: page ? parseInt(page) : 1,
-        limit: 2,
-      }
+       input: {
+         query: query,
+         filters: {
+           // status: CarStatus.Published,
+           ...(filters.brand && { brand: filters.brand}),
+           ...(filters.category && { category: filters.category}),
+           ...(filters.transmission && { transmission: filters.transmission}),
+         },
+         page: page ? parseInt(page) : 1,
+         limit: 2,
+       }
     },
-  })
+  });
 
   if(loading) {
     return <Loader fullScreen={true}/>;

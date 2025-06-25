@@ -3,22 +3,16 @@ import CardItem from "@/components/car/CarItem";
 import { Link } from "react-router-dom";
 import { ArrowLeftRight } from "lucide-react";
 import { Button } from "@/components/shadcn/button";
-import { CarListFragment, PaginationFragment } from "@/graphql/queries/car.queries";
-import { FragmentType, useFragment } from "@/__generated__";
 import Paginator from "../layout/Paginator";
 import { useUrlSearchParams } from "@/hooks/useUrlSearchParams";
-
+import { CarListFragment, PaginationFragment } from "@/graphql/__generated__/types";
 
 type Props = {
-  cars: FragmentType<typeof CarListFragment>[]; 
-  pagination?: FragmentType<typeof PaginationFragment>;
+  cars: CarListFragment[]; 
+  pagination?: PaginationFragment;
 }
 
-const CarList = ( props: Props) => {
-  const pagination = useFragment(PaginationFragment, props.pagination);
-  console.log("🚀 ~ CarList ~ pagination:", pagination)
-
-
+const CarList = ( { cars, pagination }: Props) => {
   const [urlSearchParams, setUrlSearchParams] = useUrlSearchParams()
 
   function handlePageChange(page: number) {
@@ -41,7 +35,7 @@ const CarList = ( props: Props) => {
         </div>
       </CardHeader>
       <div className="text-sm text-muted-foreground">
-        { props.cars?.length ? props.cars.map((car, idx) => (
+        { cars?.length ? cars.map((car, idx) => (
           <CardItem key={idx} car={car} />
         )) : <p>No cars found.</p> }
       </div>

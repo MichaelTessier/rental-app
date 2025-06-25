@@ -10,7 +10,7 @@ function App() {
   return (
     <>
         <BrowserRouter>
-          <div className="flex flex-col min-h-screen justify-between bg-gray-100">
+          <div className="flex flex-col min-h-screen justify-between bg-stone-50">
 
             <Header />
               <Routes>

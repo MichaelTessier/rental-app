@@ -5,8 +5,6 @@ import { Input } from "../shadcn/input";
 import { CarBrand, CarCategory, CarTransmission } from "@/__generated__/graphql";
 import { useState } from "react";
 import { useUrlSearchParams } from "@/hooks/useUrlSearchParams";
-// import { removeEmpty } from "@/utils/object";
-// import { useNavigate } from "react-router";
 
 const carCategories = Object.values(CarCategory);
 const carBrands = Object.values(CarBrand)
@@ -26,8 +24,20 @@ const CarFilters = () => {
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    
-    setUrlSearchParams(urlSearchParams, 'query', query); 
+
+    if(!query) {
+      removeUrlSearchParam(urlSearchParams, 'query');
+    } else {
+      setUrlSearchParams(urlSearchParams, 'query', query); 
+    }
+  }
+
+  const handleChangeQuery = (value: string) => {
+    setQuery(value)
+
+    if(!value) {
+      removeUrlSearchParam(urlSearchParams, 'query');
+    }
   }
 
   const handleChangeFilters = (type: keyof typeof filters, value: string, isCheck: boolean) => {
@@ -57,7 +67,7 @@ const CarFilters = () => {
           <div className="grid gap-0.5">
             <div className="text-sm text-muted-foreground">
               <div className="filter-section my-8">
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={(e) => handleSubmit(e)}>
                   <h2 className="text-xl font-bold mt-4 my-2">Type keyword</h2>
                   <div className="relative ml-auto flex-1 md:grow-0">
                     <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
@@ -66,7 +76,7 @@ const CarFilters = () => {
                       placeholder="Search..."
                       className="w-full rounded-lg bg-background pl-8"
                       value={query}
-                      onChange={(e) => setQuery(e.target.value)}
+                      onChange={(e) => handleChangeQuery(e.target.value)}
                     />
                   </div>
                 </form>

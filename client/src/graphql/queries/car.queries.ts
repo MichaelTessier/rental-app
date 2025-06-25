@@ -1,5 +1,13 @@
 import { gql } from '@/__generated__/gql'
 
+export const PaginationFragment = gql(/* GraphQL */ `
+  fragment Pagination on Pagination {
+    total
+    page
+    limit
+  }
+`);
+
 export const CarListFragment = gql(/* GraphQL */ `
   fragment CarList on Car {
     name
@@ -24,6 +32,9 @@ export const getCars = gql(/* GraphQL */`
     cars(input: $input) {
       items {
         ...CarList
+      }
+      pagination {
+        ...Pagination
       }
     }
   }

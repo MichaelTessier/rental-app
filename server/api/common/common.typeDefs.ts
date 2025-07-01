@@ -1,6 +1,15 @@
 import { gql } from 'graphql-tag' 
 
 export const commonTypeDefs = gql`
+  enum ErrorCode {
+    NOT_FOUND
+    BAD_REQUEST
+    # UNAUTHORIZED
+    # FORBIDDEN
+    # CONFLICT
+    INTERNAL_SERVER_ERROR
+  }
+
   type Image {
     url: String!
     publicId: String!

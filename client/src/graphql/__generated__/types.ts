@@ -139,6 +139,12 @@ export type CarsOutput = {
   pagination: Pagination;
 };
 
+export enum ErrorCode {
+  BadRequest = 'BAD_REQUEST',
+  InternalServerError = 'INTERNAL_SERVER_ERROR',
+  NotFound = 'NOT_FOUND'
+}
+
 export type Image = {
   __typename?: 'Image';
   publicId: Scalars['String']['output'];

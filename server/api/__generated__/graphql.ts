@@ -138,6 +138,14 @@ export type CarsOutput = {
   pagination: Pagination;
 };
 
+export enum ErrorCode {
+  BadRequest = 'BAD_REQUEST',
+  CastError = 'CAST_ERROR',
+  InternalServerError = 'INTERNAL_SERVER_ERROR',
+  NotFound = 'NOT_FOUND',
+  ValidationError = 'VALIDATION_ERROR'
+}
+
 export type Image = {
   __typename?: 'Image';
   publicId: Scalars['String']['output'];
@@ -290,6 +298,7 @@ export type ResolversTypes = {
   CarTransmission: CarTransmission;
   CarsInput: CarsInput;
   CarsOutput: ResolverTypeWrapper<CarsOutput>;
+  ErrorCode: ErrorCode;
   Float: ResolverTypeWrapper<Scalars['Float']['output']>;
   ID: ResolverTypeWrapper<Scalars['ID']['output']>;
   Image: ResolverTypeWrapper<Image>;

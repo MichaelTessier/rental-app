@@ -3,6 +3,7 @@ import Header from './components/layout/Header'
 import Footer from './components/layout/Footer'
 import Home from "./components/pages/Home"
 import Car from "./components/pages/Car"
+import { Toaster } from "./components/shadcn/sonner"
 
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
                 {/* <Route path="/me/profile" element={<UserProfile />} /> */}
               </Routes>
             <Footer />
+            <Toaster />
           </div>
         </BrowserRouter>
     </>

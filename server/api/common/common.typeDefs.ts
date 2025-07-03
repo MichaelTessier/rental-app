@@ -17,7 +17,7 @@ export const commonTypeDefs = gql`
   type Image {
     url: String!
     publicId: String!
-  }@
+  }
 
   input ImageInput {
     url: String!

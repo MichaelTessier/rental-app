@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import { User, UserRole } from "../__generated__/graphql";
+import * as bcrypt from "bcrypt";
 
 const userSchema = new mongoose.Schema<User>({
   firstName: {
@@ -48,5 +49,13 @@ const userSchema = new mongoose.Schema<User>({
   },
 
 }, { timestamps: true });
+
+userSchema.pre("save", async function (next) {
+  if(!this.isModified('password')) return next();
+
+  this.password = bcrypt.hashSync(this.password, 10)
+
+  next()
+})
 
 export const UserModel = mongoose.model<User>("User", userSchema, "users");

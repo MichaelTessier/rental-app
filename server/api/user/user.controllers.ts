@@ -4,9 +4,9 @@ import { UserModel } from "./user.models";
 
 export const registerUser = async(user: Maybe<UserInput> | undefined): Promise<User> => {
   try {
-    const newUser = UserModel.create(user);    
+    const newUser = UserModel.create(user)
 
-    return newUser;
+    return newUser
   } catch (error) {
     throw new GraphQLError('Error creating user', {
       extensions: {

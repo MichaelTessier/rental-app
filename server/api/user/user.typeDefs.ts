@@ -11,7 +11,6 @@ export const userTypeDefs = /* GraphQL */ `
     email: EmailAddress!
     firstName: String!
     lastName: String!
-    password: String!
     phoneNumber: String
     resetPasswordExpires: DateTime
     resetPasswordToken: String

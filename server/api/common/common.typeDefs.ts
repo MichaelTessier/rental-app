@@ -1,6 +1,10 @@
 import { gql } from 'graphql-tag' 
 
 export const commonTypeDefs = gql`
+  scalar EmailAddress
+  scalar ObjectID
+  scalar DateTime
+
   enum ErrorCode {
     NOT_FOUND
     BAD_REQUEST
@@ -13,7 +17,7 @@ export const commonTypeDefs = gql`
   type Image {
     url: String!
     publicId: String!
-  }
+  }@
 
   input ImageInput {
     url: String!

@@ -3,7 +3,7 @@ import { Car, CarInput, CarsInput, CarsOutput, Maybe } from "../__generated__/gr
 import QueryService from "../services/query.service";
 import CarModel from "./car.models";
 import { toFilterQuery } from "./car.utils";
-import { BadRequestError, NotFoundError } from "../error";
+import { NotFoundError } from "../error";
 
 
 export const carList = async (args: Maybe<CarsInput> | undefined): Promise<CarsOutput> => {

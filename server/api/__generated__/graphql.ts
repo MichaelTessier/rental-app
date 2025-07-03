@@ -1,4 +1,4 @@
-import { GraphQLResolveInfo } from 'graphql';
+import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -14,6 +14,9 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean; }
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
+  DateTime: { input: Date; output: Date; }
+  EmailAddress: { input: string; output: string; }
+  ObjectID: { input: string; output: string; }
 };
 
 export type Car = {
@@ -25,7 +28,7 @@ export type Car = {
   description: Scalars['String']['output'];
   doors: CarDoors;
   fuelType: CarFuelType;
-  id: Scalars['ID']['output'];
+  id: Scalars['ObjectID']['output'];
   images?: Maybe<Array<Image>>;
   millage: Scalars['Int']['output'];
   name: Scalars['String']['output'];
@@ -140,10 +143,8 @@ export type CarsOutput = {
 
 export enum ErrorCode {
   BadRequest = 'BAD_REQUEST',
-  CastError = 'CAST_ERROR',
   InternalServerError = 'INTERNAL_SERVER_ERROR',
-  NotFound = 'NOT_FOUND',
-  ValidationError = 'VALIDATION_ERROR'
+  NotFound = 'NOT_FOUND'
 }
 
 export type Image = {
@@ -161,6 +162,7 @@ export type Mutation = {
   __typename?: 'Mutation';
   createCar?: Maybe<Car>;
   deleteCar?: Maybe<Scalars['Boolean']['output']>;
+  registerUser: User;
   updateCar?: Maybe<Scalars['Boolean']['output']>;
 };
 
@@ -171,12 +173,17 @@ export type MutationCreateCarArgs = {
 
 
 export type MutationDeleteCarArgs = {
-  id: Scalars['String']['input'];
+  id: Scalars['ObjectID']['input'];
+};
+
+
+export type MutationRegisterUserArgs = {
+  input: UserInput;
 };
 
 
 export type MutationUpdateCarArgs = {
-  id: Scalars['String']['input'];
+  id: Scalars['ObjectID']['input'];
   input: CarInput;
 };
 
@@ -191,16 +198,24 @@ export type Query = {
   __typename?: 'Query';
   car?: Maybe<Car>;
   cars?: Maybe<CarsOutput>;
+  me?: Maybe<User>;
+  user?: Maybe<User>;
+  users?: Maybe<Array<User>>;
 };
 
 
 export type QueryCarArgs = {
-  id: Scalars['String']['input'];
+  id: Scalars['ObjectID']['input'];
 };
 
 
 export type QueryCarsArgs = {
   input?: InputMaybe<CarsInput>;
+};
+
+
+export type QueryUserArgs = {
+  id: Scalars['ObjectID']['input'];
 };
 
 export type Ratings = {
@@ -213,6 +228,37 @@ export type RentPerDayInput = {
   max?: InputMaybe<Scalars['Int']['input']>;
   min?: InputMaybe<Scalars['Int']['input']>;
 };
+
+export type User = {
+  __typename?: 'User';
+  avatar?: Maybe<Image>;
+  createdAt: Scalars['String']['output'];
+  email: Scalars['EmailAddress']['output'];
+  firstName: Scalars['String']['output'];
+  id: Scalars['ObjectID']['output'];
+  lastName: Scalars['String']['output'];
+  password: Scalars['String']['output'];
+  phoneNumber?: Maybe<Scalars['String']['output']>;
+  resetPasswordExpires?: Maybe<Scalars['DateTime']['output']>;
+  resetPasswordToken?: Maybe<Scalars['String']['output']>;
+  role?: Maybe<Array<UserRole>>;
+  updatedAt: Scalars['String']['output'];
+};
+
+export type UserInput = {
+  avatar?: InputMaybe<ImageInput>;
+  email: Scalars['EmailAddress']['input'];
+  firstName: Scalars['String']['input'];
+  lastName: Scalars['String']['input'];
+  password: Scalars['String']['input'];
+  phoneNumber?: InputMaybe<Scalars['String']['input']>;
+  role?: InputMaybe<Array<UserRole>>;
+};
+
+export enum UserRole {
+  Admin = 'ADMIN',
+  User = 'USER'
+}
 
 
 
@@ -298,18 +344,23 @@ export type ResolversTypes = {
   CarTransmission: CarTransmission;
   CarsInput: CarsInput;
   CarsOutput: ResolverTypeWrapper<CarsOutput>;
+  DateTime: ResolverTypeWrapper<Scalars['DateTime']['output']>;
+  EmailAddress: ResolverTypeWrapper<Scalars['EmailAddress']['output']>;
   ErrorCode: ErrorCode;
   Float: ResolverTypeWrapper<Scalars['Float']['output']>;
-  ID: ResolverTypeWrapper<Scalars['ID']['output']>;
   Image: ResolverTypeWrapper<Image>;
   ImageInput: ImageInput;
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
   Mutation: ResolverTypeWrapper<{}>;
+  ObjectID: ResolverTypeWrapper<Scalars['ObjectID']['output']>;
   Pagination: ResolverTypeWrapper<Pagination>;
   Query: ResolverTypeWrapper<{}>;
   Ratings: ResolverTypeWrapper<Ratings>;
   RentPerDayInput: RentPerDayInput;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
+  User: ResolverTypeWrapper<User>;
+  UserInput: UserInput;
+  UserRole: UserRole;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -320,17 +371,21 @@ export type ResolversParentTypes = {
   CarInput: CarInput;
   CarsInput: CarsInput;
   CarsOutput: CarsOutput;
+  DateTime: Scalars['DateTime']['output'];
+  EmailAddress: Scalars['EmailAddress']['output'];
   Float: Scalars['Float']['output'];
-  ID: Scalars['ID']['output'];
   Image: Image;
   ImageInput: ImageInput;
   Int: Scalars['Int']['output'];
   Mutation: {};
+  ObjectID: Scalars['ObjectID']['output'];
   Pagination: Pagination;
   Query: {};
   Ratings: Ratings;
   RentPerDayInput: RentPerDayInput;
   String: Scalars['String']['output'];
+  User: User;
+  UserInput: UserInput;
 };
 
 export type CarResolvers<ContextType = any, ParentType extends ResolversParentTypes['Car'] = ResolversParentTypes['Car']> = {
@@ -341,7 +396,7 @@ export type CarResolvers<ContextType = any, ParentType extends ResolversParentTy
   description?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   doors?: Resolver<ResolversTypes['CarDoors'], ParentType, ContextType>;
   fuelType?: Resolver<ResolversTypes['CarFuelType'], ParentType, ContextType>;
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ObjectID'], ParentType, ContextType>;
   images?: Resolver<Maybe<Array<ResolversTypes['Image']>>, ParentType, ContextType>;
   millage?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -363,6 +418,14 @@ export type CarsOutputResolvers<ContextType = any, ParentType extends ResolversP
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export interface DateTimeScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['DateTime'], any> {
+  name: 'DateTime';
+}
+
+export interface EmailAddressScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['EmailAddress'], any> {
+  name: 'EmailAddress';
+}
+
 export type ImageResolvers<ContextType = any, ParentType extends ResolversParentTypes['Image'] = ResolversParentTypes['Image']> = {
   publicId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   url?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -372,8 +435,13 @@ export type ImageResolvers<ContextType = any, ParentType extends ResolversParent
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   createCar?: Resolver<Maybe<ResolversTypes['Car']>, ParentType, ContextType, RequireFields<MutationCreateCarArgs, 'input'>>;
   deleteCar?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationDeleteCarArgs, 'id'>>;
+  registerUser?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationRegisterUserArgs, 'input'>>;
   updateCar?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationUpdateCarArgs, 'id' | 'input'>>;
 };
+
+export interface ObjectIdScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['ObjectID'], any> {
+  name: 'ObjectID';
+}
 
 export type PaginationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Pagination'] = ResolversParentTypes['Pagination']> = {
   limit?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
@@ -385,6 +453,9 @@ export type PaginationResolvers<ContextType = any, ParentType extends ResolversP
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   car?: Resolver<Maybe<ResolversTypes['Car']>, ParentType, ContextType, RequireFields<QueryCarArgs, 'id'>>;
   cars?: Resolver<Maybe<ResolversTypes['CarsOutput']>, ParentType, ContextType, Partial<QueryCarsArgs>>;
+  me?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
+  user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryUserArgs, 'id'>>;
+  users?: Resolver<Maybe<Array<ResolversTypes['User']>>, ParentType, ContextType>;
 };
 
 export type RatingsResolvers<ContextType = any, ParentType extends ResolversParentTypes['Ratings'] = ResolversParentTypes['Ratings']> = {
@@ -393,13 +464,33 @@ export type RatingsResolvers<ContextType = any, ParentType extends ResolversPare
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {
+  avatar?: Resolver<Maybe<ResolversTypes['Image']>, ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  email?: Resolver<ResolversTypes['EmailAddress'], ParentType, ContextType>;
+  firstName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ObjectID'], ParentType, ContextType>;
+  lastName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  password?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  phoneNumber?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  resetPasswordExpires?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
+  resetPasswordToken?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  role?: Resolver<Maybe<Array<ResolversTypes['UserRole']>>, ParentType, ContextType>;
+  updatedAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type Resolvers<ContextType = any> = {
   Car?: CarResolvers<ContextType>;
   CarsOutput?: CarsOutputResolvers<ContextType>;
+  DateTime?: GraphQLScalarType;
+  EmailAddress?: GraphQLScalarType;
   Image?: ImageResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
+  ObjectID?: GraphQLScalarType;
   Pagination?: PaginationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   Ratings?: RatingsResolvers<ContextType>;
+  User?: UserResolvers<ContextType>;
 };
 

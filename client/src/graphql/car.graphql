@@ -9,7 +9,7 @@ query getCars($input: CarsInput) {
   }
 }
 
-query getCar($id: String!) {
+query getCar($id: ObjectID!) {
   car(id: $id) {
     ...Car
   }

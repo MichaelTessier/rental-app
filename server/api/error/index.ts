@@ -21,6 +21,12 @@ export class BadRequestError extends CustomError {
   }
 }
 
+export class UnauthorizedError extends CustomError {
+  constructor(message: string) {
+    super(message, ErrorCode.Unauthorized);
+  }
+}
+
 export const isMongoError = (error: any): boolean => {
   return error?.name === 'CastError' || error?.name === 'ValidationError';
 }

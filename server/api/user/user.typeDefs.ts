@@ -22,6 +22,7 @@ export const userTypeDefs = /* GraphQL */ `
     me: User
     user(id: ObjectID!): User
     users: [User!]
+    login(input: LoginInput): User
   }
 
   type Mutation {
@@ -36,5 +37,10 @@ export const userTypeDefs = /* GraphQL */ `
     password: String!
     phoneNumber: String
     role: [UserRole!]
+  }
+
+  input LoginInput {
+    email: EmailAddress!
+    password: String!
   }
 `

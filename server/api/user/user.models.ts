@@ -1,8 +1,19 @@
-import mongoose from "mongoose";
+import { Model, model, Schema, Document } from "mongoose";
 import { User, UserRole } from "../__generated__/graphql";
 import * as bcrypt from "bcrypt";
 
-const userSchema = new mongoose.Schema<User>({
+
+export type UserDocument = Document & UserModel & UserModelMethods;
+
+interface UserModel extends User { 
+  password: string
+}
+
+interface UserModelMethods {
+  comparePassword(password: string): Promise<boolean>;
+}
+
+const userSchema = new Schema<UserModel, Model<UserModel>, UserModelMethods>({
   firstName: {
     type: String,
     required: [true, "First name is required"],
@@ -47,8 +58,9 @@ const userSchema = new mongoose.Schema<User>({
     type: Date,   
     default: null,
   },
-
-}, { timestamps: true });
+}, { 
+  timestamps: true,
+});
 
 userSchema.pre("save", async function (next) {
   if(!this.isModified('password')) return next();
@@ -58,4 +70,8 @@ userSchema.pre("save", async function (next) {
   next()
 })
 
-export const UserModel = mongoose.model<User>("User", userSchema, "users");
+userSchema.method('comparePassword', async function (password: string): Promise<boolean> {
+  return bcrypt.compare(password, this.password);
+});
+
+export const UserModel = model<UserModel, Model<UserModel, {}, {}, {}, UserDocument>>("User", userSchema, "users");

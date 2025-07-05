@@ -143,8 +143,11 @@ export type CarsOutput = {
 
 export enum ErrorCode {
   BadRequest = 'BAD_REQUEST',
+  Conflict = 'CONFLICT',
+  Forbidden = 'FORBIDDEN',
   InternalServerError = 'INTERNAL_SERVER_ERROR',
-  NotFound = 'NOT_FOUND'
+  NotFound = 'NOT_FOUND',
+  Unauthorized = 'UNAUTHORIZED'
 }
 
 export type Image = {
@@ -156,6 +159,11 @@ export type Image = {
 export type ImageInput = {
   publicId: Scalars['String']['input'];
   url: Scalars['String']['input'];
+};
+
+export type LoginInput = {
+  email: Scalars['EmailAddress']['input'];
+  password: Scalars['String']['input'];
 };
 
 export type Mutation = {
@@ -198,6 +206,7 @@ export type Query = {
   __typename?: 'Query';
   car?: Maybe<Car>;
   cars?: Maybe<CarsOutput>;
+  login?: Maybe<User>;
   me?: Maybe<User>;
   user?: Maybe<User>;
   users?: Maybe<Array<User>>;
@@ -211,6 +220,11 @@ export type QueryCarArgs = {
 
 export type QueryCarsArgs = {
   input?: InputMaybe<CarsInput>;
+};
+
+
+export type QueryLoginArgs = {
+  input?: InputMaybe<LoginInput>;
 };
 
 
@@ -237,7 +251,6 @@ export type User = {
   firstName: Scalars['String']['output'];
   id: Scalars['ObjectID']['output'];
   lastName: Scalars['String']['output'];
-  password: Scalars['String']['output'];
   phoneNumber?: Maybe<Scalars['String']['output']>;
   resetPasswordExpires?: Maybe<Scalars['DateTime']['output']>;
   resetPasswordToken?: Maybe<Scalars['String']['output']>;
@@ -351,6 +364,7 @@ export type ResolversTypes = {
   Image: ResolverTypeWrapper<Image>;
   ImageInput: ImageInput;
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
+  LoginInput: LoginInput;
   Mutation: ResolverTypeWrapper<{}>;
   ObjectID: ResolverTypeWrapper<Scalars['ObjectID']['output']>;
   Pagination: ResolverTypeWrapper<Pagination>;
@@ -377,6 +391,7 @@ export type ResolversParentTypes = {
   Image: Image;
   ImageInput: ImageInput;
   Int: Scalars['Int']['output'];
+  LoginInput: LoginInput;
   Mutation: {};
   ObjectID: Scalars['ObjectID']['output'];
   Pagination: Pagination;
@@ -453,6 +468,7 @@ export type PaginationResolvers<ContextType = any, ParentType extends ResolversP
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   car?: Resolver<Maybe<ResolversTypes['Car']>, ParentType, ContextType, RequireFields<QueryCarArgs, 'id'>>;
   cars?: Resolver<Maybe<ResolversTypes['CarsOutput']>, ParentType, ContextType, Partial<QueryCarsArgs>>;
+  login?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, Partial<QueryLoginArgs>>;
   me?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
   user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryUserArgs, 'id'>>;
   users?: Resolver<Maybe<Array<ResolversTypes['User']>>, ParentType, ContextType>;
@@ -471,7 +487,6 @@ export type UserResolvers<ContextType = any, ParentType extends ResolversParentT
   firstName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ObjectID'], ParentType, ContextType>;
   lastName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  password?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   phoneNumber?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   resetPasswordExpires?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   resetPasswordToken?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;

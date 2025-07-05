@@ -6,6 +6,7 @@ import { connectToDatabase } from './services/mongoose/mongoose.service'
 import { startApolloServer } from './apollo/server'
 import appConfig from './app.config'
 import { expressMiddleware } from '@as-integrations/express5';
+import { buildContext } from './apollo/context';
 
 const app = express()
 
@@ -26,7 +27,9 @@ app.listen(appConfig.port, async () => {
       credentials: true,
     }),
     json(),
-    expressMiddleware(apolloServer)
+    expressMiddleware(apolloServer, {
+      context: ({ req, res }) => buildContext({ req, res }),
+    })
   )
 
   console.log(`Server is running on http://localhost:${appConfig.port}`)

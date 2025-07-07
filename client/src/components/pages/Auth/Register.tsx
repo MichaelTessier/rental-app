@@ -13,7 +13,7 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  // FormMessage,
+  FormMessage,
 } from "@/components/shadcn/form";
 import { Input } from "@/components/shadcn/input";
 import { MailPlus } from "lucide-react";
@@ -22,14 +22,20 @@ import { useForm } from "react-hook-form"
 import { useRegisterUserMutation } from "@/graphql/__generated__/types";
 import Loader from "@/components/ui/Loader";
 import { toast } from "sonner"
+import { registerSchema, RegisterSchema } from "./Register.schema";
+import { zodResolver } from "@hookform/resolvers/zod"
 
 const Register = () => {
-  const form = useForm();
+  const form = useForm<RegisterSchema>(
+    {
+      resolver: zodResolver(registerSchema),
+    }
+  );
 
   const [registerUserMutation, { loading} ] = useRegisterUserMutation()
 
 
-  async function onSubmit(payload: any) {
+  async function onSubmit(payload: RegisterSchema) {
 
     await registerUserMutation({
       variables: {
@@ -77,6 +83,7 @@ const Register = () => {
                             {...field}
                           />
                         </FormControl>
+                        <FormMessage />
                       </FormItem>
                     )}
                   />
@@ -93,6 +100,7 @@ const Register = () => {
                             {...field}
                           />
                         </FormControl>
+                        <FormMessage />
                       </FormItem>
                     )}
                   />
@@ -109,6 +117,7 @@ const Register = () => {
                             {...field}
                           />
                         </FormControl>
+                        <FormMessage />
                       </FormItem>
                     )}
                   />
@@ -126,6 +135,7 @@ const Register = () => {
                             {...field}
                           />
                         </FormControl>
+                        <FormMessage />
                       </FormItem>
                     )}
                   />

@@ -3,13 +3,13 @@ import { gql } from 'graphql-tag'
 export const carTypeDefs = gql`
   type Query {
     cars(input: CarsInput): CarsOutput
-    car(id: String!): Car
+    car(id: ObjectID!): Car
   } 
 
   type Mutation {
     createCar(input: CarInput!): Car
-    updateCar(id: String!, input: CarInput!): Boolean
-    deleteCar(id: String!): Boolean
+    updateCar(id: ObjectID!, input: CarInput!): Boolean
+    deleteCar(id: ObjectID!): Boolean
   }
 
   type Pagination {
@@ -24,7 +24,7 @@ export const carTypeDefs = gql`
   }
 
   type Car {
-    id: ID!
+    id: ObjectID!
     name: String!
     description: String!
     status: CarStatus!

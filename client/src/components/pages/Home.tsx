@@ -1,11 +1,11 @@
 import CarList from "@/components/car/CarList";
 import Loader from "@/components/ui/Loader";
-import CarFilters from "../car/CarFilters";
+import CarFilters from "@/components/car/CarFilters";
 import { useUrlSearchParams } from "@/hooks/useUrlSearchParams";
 import { isEnumValue } from "@/utils/object";
 import { CarBrand, CarCategory, CarFiltersInput, useGetCarsQuery , CarTransmission } from "@/graphql/__generated__/types";
-import Alert from "../layout/Alert";
-import { AlertVariant } from "../layout/Alert.model";
+import Alert from "@/components/layout/Alert";
+import { AlertVariant } from "@/components/layout/Alert.model";
 
 
 const Home = () => {

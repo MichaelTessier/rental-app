@@ -1,12 +1,16 @@
 import { gql } from 'graphql-tag' 
 
 export const commonTypeDefs = gql`
+  scalar EmailAddress
+  scalar ObjectID
+  scalar DateTime
+
   enum ErrorCode {
     NOT_FOUND
     BAD_REQUEST
-    # UNAUTHORIZED
-    # FORBIDDEN
-    # CONFLICT
+    UNAUTHORIZED
+    FORBIDDEN
+    CONFLICT
     INTERNAL_SERVER_ERROR
   }
 

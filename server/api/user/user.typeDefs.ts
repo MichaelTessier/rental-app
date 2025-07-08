@@ -22,10 +22,10 @@ export const userTypeDefs = /* GraphQL */ `
     me: User
     user(id: ObjectID!): User
     users: [User!]
-    login(input: LoginInput): User
   }
 
   type Mutation {
+    login(input: LoginInput): User
     registerUser(input: UserInput!): User!
   }
 

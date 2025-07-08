@@ -170,6 +170,7 @@ export type Mutation = {
   __typename?: 'Mutation';
   createCar?: Maybe<Car>;
   deleteCar?: Maybe<Scalars['Boolean']['output']>;
+  login?: Maybe<User>;
   registerUser: User;
   updateCar?: Maybe<Scalars['Boolean']['output']>;
 };
@@ -182,6 +183,11 @@ export type MutationCreateCarArgs = {
 
 export type MutationDeleteCarArgs = {
   id: Scalars['ObjectID']['input'];
+};
+
+
+export type MutationLoginArgs = {
+  input?: InputMaybe<LoginInput>;
 };
 
 
@@ -206,7 +212,6 @@ export type Query = {
   __typename?: 'Query';
   car?: Maybe<Car>;
   cars?: Maybe<CarsOutput>;
-  login?: Maybe<User>;
   me?: Maybe<User>;
   user?: Maybe<User>;
   users?: Maybe<Array<User>>;
@@ -220,11 +225,6 @@ export type QueryCarArgs = {
 
 export type QueryCarsArgs = {
   input?: InputMaybe<CarsInput>;
-};
-
-
-export type QueryLoginArgs = {
-  input?: InputMaybe<LoginInput>;
 };
 
 
@@ -450,6 +450,7 @@ export type ImageResolvers<ContextType = any, ParentType extends ResolversParent
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   createCar?: Resolver<Maybe<ResolversTypes['Car']>, ParentType, ContextType, RequireFields<MutationCreateCarArgs, 'input'>>;
   deleteCar?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationDeleteCarArgs, 'id'>>;
+  login?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, Partial<MutationLoginArgs>>;
   registerUser?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationRegisterUserArgs, 'input'>>;
   updateCar?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationUpdateCarArgs, 'id' | 'input'>>;
 };
@@ -468,7 +469,6 @@ export type PaginationResolvers<ContextType = any, ParentType extends ResolversP
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   car?: Resolver<Maybe<ResolversTypes['Car']>, ParentType, ContextType, RequireFields<QueryCarArgs, 'id'>>;
   cars?: Resolver<Maybe<ResolversTypes['CarsOutput']>, ParentType, ContextType, Partial<QueryCarsArgs>>;
-  login?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, Partial<QueryLoginArgs>>;
   me?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
   user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryUserArgs, 'id'>>;
   users?: Resolver<Maybe<Array<ResolversTypes['User']>>, ParentType, ContextType>;

@@ -1,6 +1,6 @@
 import { z } from "zod"
- 
-export const registerSchema = z.object({
+
+export const authSchema = z.object({
   firstName: z.string({
     required_error: "firstName is required.",
   }).min(2, {
@@ -22,5 +22,19 @@ export const registerSchema = z.object({
     message: "Password must be at least 6 characters.",
   }),
 })
+ 
+export const registerSchema = authSchema.pick({
+  firstName: true,
+  lastName: true,
+  email: true,
+  password: true,
+})
 
 export type RegisterSchema = z.infer<typeof registerSchema>
+
+export const loginSchema = authSchema.pick({
+  email: true,
+  password: true,
+})
+
+export type LoginSchema = z.infer<typeof loginSchema>

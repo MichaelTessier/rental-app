@@ -4,6 +4,7 @@ import Footer from './components/layout/Footer'
 import Home from "./components/pages/Home"
 import Car from "./components/pages/Car"
 import Register from "./components/pages/Auth/Register"
+import Login from "./components/pages/Auth/Login"
 import { Toaster } from "./components/shadcn/sonner"
 
 
@@ -18,7 +19,7 @@ function App() {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/car/:id" element={<Car />} />
-              {/* <Route path="/login" element={<Login />} /> */}
+              <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
               {/* <Route path="/admin/dashboard" element={<AdminDashboard />} /> */}
               {/* <Route path="/me/bookings" element={<MyBookings />} /> */}

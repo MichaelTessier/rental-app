@@ -3,3 +3,9 @@ mutation registerUser($input: UserInput!) {
     id
   }
 }
+
+mutation login($input: LoginInput!) {
+  login(input: $input) {
+    id
+  }
+}

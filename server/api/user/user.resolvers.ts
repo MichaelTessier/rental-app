@@ -4,8 +4,8 @@ import { registerUser, login  } from "./user.controllers";
 
 export const userResolvers = {
   Query: {
-    me: async(_root: {}) => {
-      return 'context.user';
+    me: async(_root: {}, _args: {}, context: Context) => {
+      return context.user;
     }
   },
 

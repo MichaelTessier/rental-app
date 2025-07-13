@@ -17,9 +17,16 @@ import {
   DropdownMenuTrigger,
 } from "@/components/shadcn/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/shadcn/avatar";
+import { userStore } from "@/store/user";
+import { useReactiveVar } from "@apollo/client";
+import { Skeleton } from "../shadcn/skeleton";
+import UserMobileMenu from "../navigation/UserMobileMenu";
+import UserAvatar from "../user/UserAvatar";
 // import AdminMobileMenu from "../mobile-menu/AdminMobileMenu";
 
 const Header = () => {
+  const userState = useReactiveVar(userStore);
+
   return (
     <div className="flex items-center justify-between px-5 py-2 bg-white dark:bg-gray-800 border">
       <Link to="/" className="flex items-center gap-2">
@@ -27,38 +34,43 @@ const Header = () => {
         <span className="text-lg font-semibold">Rental App</span>
       </Link>
       <div className="hidden lg:flex gap-4 mr-1">
-        <Button className="mb-2" asChild>
-          <Link to="/login">Login</Link>
-        </Button>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              variant="outline"
-              size="icon"
-              className="overflow-hidden rounded-full"
-            >
-              <div className="flex items-center">
-                <Avatar className="h-10 w-10">
-                  <AvatarImage src="path/to/avatar.jpg" />
-                  <AvatarFallback>AB</AvatarFallback>
-                </Avatar>
-              </div>
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <Link to="/admin/dashboard">
-              <DropdownMenuItem>Dashboard</DropdownMenuItem>
-            </Link>
-            <Link to="/me/bookings">
-              <DropdownMenuItem>My Bookings</DropdownMenuItem>
-            </Link>
-            <Link to="/me/profile">
-              <DropdownMenuItem>Profile</DropdownMenuItem>
-            </Link>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>Logout</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        {!userState.isAuthenticated && !userState.isLoading &&(
+          <Button className="mb-2" asChild>
+            <Link to="/login">Login</Link>
+          </Button>
+        )}
+        { userState.isAuthenticated && (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  className="overflow-hidden rounded-full"
+                >
+                  <UserAvatar user={userState.user} />
+                </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              { userState.isAdmin && (
+                <Link to="/admin/dashboard">
+                  <DropdownMenuItem>Dashboard</DropdownMenuItem>
+                </Link>
+              )}
+              <Link to="/me/bookings">
+                <DropdownMenuItem>My Bookings</DropdownMenuItem>
+              </Link>
+              <Link to="/me/profile">
+                <DropdownMenuItem>Profile</DropdownMenuItem>
+              </Link>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>Logout</DropdownMenuItem>
+
+            </DropdownMenuContent>
+          </DropdownMenu>
+        )}
+        { userState.isLoading && (
+          <Skeleton className="h-9 w-9 rounded-full" />
+        )}
       </div>
       <Sheet>
         <SheetTrigger asChild>
@@ -72,34 +84,46 @@ const Header = () => {
           <SheetHeader>
             <SheetDescription />
           </SheetHeader>
-          <div className="grid w-[250px] p-4">
+          <div className="grid  p-4">
             <div className="flex items-center mb-3">
-              <span className="me-4"></span>
-              <Button asChild>
-                <Link to="/login">Login</Link>
-              </Button>
-              <Button
-                variant="outline"
-                size="icon"
-                className="overflow-hidden rounded-full"
-              >
-                <div className="flex items-center">
-                  <Avatar className="h-10 w-10">
-                    <AvatarImage src="path/to/avatar.jpg" />
-                    <AvatarFallback>AB</AvatarFallback>
-                  </Avatar>
+              {/* <span className="me-4"></span> */}
+              {!userState.isAuthenticated && (
+                <Button asChild>
+                  <Link to="/login">Login</Link>
+                </Button>
+              )}
+              {userState.isAuthenticated && (
+                <>
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    className="overflow-hidden rounded-full"
+                  >
+                    <UserAvatar user={userState.user} />
+                  </Button>
+                  <p className="ps-2">{userState.user?.firstName}</p>
+                </>
+              )}
+              {userState.isLoading && (
+                <div className="flex items-center gap-2">
+                  <Skeleton className="h-9 w-9 rounded-full" />
+                  <Skeleton className="h-4 w-40 " />
                 </div>
-              </Button>
-              <p className="ps-2">User Name</p>
+              )}
             </div>
-            {/* <AdminMobileMenu /> */}
-            <DropdownMenuSeparator />
-            <Link
-              to="#"
-              className="text-lg font-medium hover:underline underline-offset-4"
-            >
-              Logout
-            </Link>
+            {userState.isAuthenticated && (
+              <>
+                {/* <AdminMobileMenu /> */}
+                <UserMobileMenu isAdmin={userState.isAdmin}/>
+                <DropdownMenuSeparator />
+                <Link
+                  to="#"
+                  className="text-lg font-medium hover:underline underline-offset-4 mt-3"
+                >
+                  Logout
+                </Link>
+              </>
+            )}
           </div>
         </SheetContent>
       </Sheet>

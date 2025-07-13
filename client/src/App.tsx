@@ -6,9 +6,33 @@ import Car from "./components/pages/Car"
 import Register from "./components/pages/Auth/Register"
 import Login from "./components/pages/Auth/Login"
 import { Toaster } from "./components/shadcn/sonner"
+import { useMeQuery, UserRole } from "./graphql/__generated__/types"
+import { initialUserState, userStore } from "./store/user"
+import { useEffect } from "react"
 
 
 function App() {
+  const { loading } = useMeQuery({
+    onCompleted: (data) => {
+      if(!data.me) return
+
+      console.log("🚀 ~ App ~ data.me:", data.me)
+
+      userStore({
+        user: data.me,
+        isAuthenticated: true,
+        isLoading: false,
+        isAdmin: Boolean(data.me?.role?.includes(UserRole.Admin)), 
+      })
+    },
+    onError: () => {
+      userStore(initialUserState);
+    },
+  });
+
+  useEffect(() => {
+    userStore(initialUserState);
+  }, [loading]);
 
   return (
     <>

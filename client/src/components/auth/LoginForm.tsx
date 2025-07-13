@@ -1,9 +1,8 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/shadcn/button";
 import {
   Card,
   CardContent,
-  CardHeader,
 } from "@/components/shadcn/card";
 import {
   Form,
@@ -14,7 +13,7 @@ import {
   FormMessage,
 } from "@/components/shadcn/form";
 import { Input } from "@/components/shadcn/input";
-import { LogIn, MailPlus } from "lucide-react";
+import { LogIn } from "lucide-react";
 
 import { useForm } from "react-hook-form"
 import { useLoginMutation } from "@/graphql/__generated__/types";
@@ -22,6 +21,8 @@ import Loader from "@/components/ui/Loader";
 import { toast } from "sonner"
 import { loginSchema, LoginSchema } from "./auth.schema";
 import { zodResolver } from "@hookform/resolvers/zod"
+import { userStore } from "@/store/user";
+import { useReactiveVar } from "@apollo/client";
 
 const LoginForm = () => {
   const form = useForm<LoginSchema>(
@@ -32,9 +33,16 @@ const LoginForm = () => {
 
   const [loginUserMutation, { loading} ] = useLoginMutation()
 
+  const userState = useReactiveVar(userStore);
+
+  const navigate = useNavigate();
+
+  if(userState.isAuthenticated) {
+    redirectToHome()
+    return null;
+  } 
 
   async function onSubmit(payload: LoginSchema) {
-
     await loginUserMutation({
       variables: {
         input: {
@@ -47,15 +55,17 @@ const LoginForm = () => {
       },
       onCompleted: () => {
         toast.success("Login successful! You can now log in.");
-        // Redirect to login or home page
+        redirectToHome()
       }
-    })
-  
+    })  
+  }
+
+  function redirectToHome() {
+    navigate("/", { replace: true });
   }
 
   return (
     <div className="w-full">
-
       <Form {...form} >
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <div className="flex flex-1 flex-col gap-4 bg-muted/40 justify-center ">

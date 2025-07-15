@@ -8,15 +8,20 @@ import Login from "./components/pages/Auth/Login"
 import { Toaster } from "./components/shadcn/sonner"
 import { useMeQuery, UserRole } from "./graphql/__generated__/types"
 import { initialUserState, userStore } from "./store/user"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
+import Dashboard from "./components/pages/Admin/AdminDashboard"
+import ProtectedRoute from "./components/navigation/ProtectedRoute"
+import UserProfile from "./components/pages/User/UserProfile"
+import Loader from "./components/ui/Loader"
 
 
 function App() {
+  const [canAccess, setCanAccess] = useState<boolean>(false);
+
   const { loading } = useMeQuery({
     onCompleted: (data) => {
       if(!data.me) return
-
-      console.log("🚀 ~ App ~ data.me:", data.me)
+      console.log("🚀 ~ App ~ data:", data)
 
       userStore({
         user: data.me,
@@ -24,9 +29,12 @@ function App() {
         isLoading: false,
         isAdmin: Boolean(data.me?.role?.includes(UserRole.Admin)), 
       })
+
+      setCanAccess(true);
     },
     onError: () => {
       userStore(initialUserState);
+      setCanAccess(true);
     },
   });
 
@@ -34,25 +42,39 @@ function App() {
     userStore(initialUserState);
   }, [loading]);
 
+  if(!canAccess) {
+    return (
+      <Loader fullScreen />
+    );
+  }
+
   return (
     <>
-        <BrowserRouter>
-          <div className="flex flex-col min-h-screen justify-between bg-stone-50">
+      <BrowserRouter>
+        <div className="flex flex-col min-h-screen justify-between bg-stone-50">
 
-            <Header />
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/car/:id" element={<Car />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
-              {/* <Route path="/admin/dashboard" element={<AdminDashboard />} /> */}
-              {/* <Route path="/me/bookings" element={<MyBookings />} /> */}
-              {/* <Route path="/me/profile" element={<UserProfile />} /> */}
-            </Routes>
-            <Footer />
-            <Toaster />
-          </div>
-        </BrowserRouter>
+          <Header />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/car/:id" element={<Car />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/admin/dashboard" element={
+              <ProtectedRoute roles={[UserRole.Admin]}>
+                <Dashboard />
+              </ProtectedRoute>
+            } />
+            {/* <Route path="/me/bookings" element={<MyBookings />} /> */}
+            <Route path="/me/profile" element={
+              <ProtectedRoute roles={[UserRole.User]}>
+                <UserProfile />
+              </ProtectedRoute>
+            }  />
+          </Routes>
+          <Footer />
+          <Toaster />
+        </div>
+      </BrowserRouter>
     </>
   )
 }

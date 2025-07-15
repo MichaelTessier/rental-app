@@ -31,7 +31,11 @@ const LoginForm = () => {
     }
   );
 
-  const [loginUserMutation, { loading} ] = useLoginMutation()
+  const [loginUserMutation, { loading} ] = useLoginMutation(
+    {
+      refetchQueries: ["Me"],
+    }
+  )
 
   const userState = useReactiveVar(userStore);
 

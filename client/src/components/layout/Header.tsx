@@ -16,13 +16,11 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/shadcn/dropdown-menu";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/shadcn/avatar";
 import { userStore } from "@/store/user";
 import { useReactiveVar } from "@apollo/client";
 import { Skeleton } from "../shadcn/skeleton";
 import UserMobileMenu from "../navigation/UserMobileMenu";
 import UserAvatar from "../user/UserAvatar";
-// import AdminMobileMenu from "../mobile-menu/AdminMobileMenu";
 
 const Header = () => {
   const userState = useReactiveVar(userStore);

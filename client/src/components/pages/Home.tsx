@@ -4,8 +4,8 @@ import CarFilters from "@/components/car/CarFilters";
 import { useUrlSearchParams } from "@/hooks/useUrlSearchParams";
 import { isEnumValue } from "@/utils/object";
 import { CarBrand, CarCategory, CarFiltersInput, useGetCarsQuery , CarTransmission } from "@/graphql/__generated__/types";
-import Alert from "@/components/layout/Alert";
-import { AlertVariant } from "@/components/layout/Alert.model";
+// import Alert from "@/components/layout/Alert";
+// import { AlertVariant } from "@/components/layout/Alert.model";
 
 
 const Home = () => {
@@ -51,7 +51,7 @@ const Home = () => {
         </div>
       )}
       <div className="md:col-span-6 lg:col-span-4 flex flex-col">
-        <Alert variant={AlertVariant.Default} title="Alert"/>
+        {/* <Alert variant={AlertVariant.Default} title="Alert"/> */}
         {/* <div className="flex items-center justify-center h-screen"></div> */}
         {/* Google Map Component */}
       </div>

@@ -9,3 +9,22 @@ mutation login($input: LoginInput!) {
     id
   }
 }
+
+query Me {
+  me {
+    id
+    createdAt
+    email
+    firstName
+    lastName
+    phoneNumber
+    resetPasswordExpires
+    resetPasswordToken
+    role
+    updatedAt
+  }
+}
+
+mutation Logout {
+  logout
+}

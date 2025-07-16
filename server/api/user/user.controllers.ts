@@ -5,6 +5,7 @@ import { Context } from "../../apollo/context";
 import { NotFoundError, UnauthorizedError } from "../error";
 import jwt from "jsonwebtoken";
 import jwtConfig from "../../services/jwt/jwt.config";
+import { USER_TOKEN_COOKIE_NAME } from "./user.const";
 
 export const registerUser = async(user: Maybe<UserInput> | undefined): Promise<User> => {
   try {
@@ -37,8 +38,7 @@ export const login = async(input: Maybe<LoginInput> | undefined, context: Contex
     
     const token = jwt.sign(
       { 
-        userId: user._id, 
-        email: user.email 
+        id: user._id, 
       },
       jwtConfig.jwtToken, 
       {
@@ -46,7 +46,7 @@ export const login = async(input: Maybe<LoginInput> | undefined, context: Contex
       }
     )
 
-    context.res.cookie('JWT_TOKEN', token, {
+    context.res.cookie(USER_TOKEN_COOKIE_NAME, token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       maxAge: jwtConfig.jwtExpiration * 1000, 
@@ -57,6 +57,23 @@ export const login = async(input: Maybe<LoginInput> | undefined, context: Contex
     return user;
   } catch (error) {
     throw new GraphQLError('Error login user', {
+      extensions: {
+        error,
+      },
+    });
+  }
+}
+
+
+export const logout = (context: Context): boolean => {
+  try {
+    context.res.cookie(USER_TOKEN_COOKIE_NAME, null, {
+      maxAge: 0, 
+    });
+
+    return true;
+  } catch (error) {
+    throw new GraphQLError('Error logout user', {
       extensions: {
         error,
       },

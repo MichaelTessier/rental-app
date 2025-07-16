@@ -1,7 +1,7 @@
 import 'dotenv/config';
 import express, { json } from 'express'
 import cors from "cors";
-
+import cookieParser from 'cookie-parser';
 import { connectToDatabase } from './services/mongoose/mongoose.service'
 import { startApolloServer } from './apollo/server'
 import appConfig from './app.config'
@@ -10,11 +10,14 @@ import { buildContext } from './apollo/context';
 
 const app = express()
 
+app.use(cookieParser());
+
 connectToDatabase()
 
 app.get('/', (_, res) => {
   res.send('Hello, World!')
 })
+
 
 app.listen(appConfig.port, async () => {
   

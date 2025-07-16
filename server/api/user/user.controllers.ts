@@ -63,3 +63,20 @@ export const login = async(input: Maybe<LoginInput> | undefined, context: Contex
     });
   }
 }
+
+
+export const logout = (context: Context): boolean => {
+  try {
+    context.res.cookie(USER_TOKEN_COOKIE_NAME, null, {
+      maxAge: 0, 
+    });
+
+    return true;
+  } catch (error) {
+    throw new GraphQLError('Error logout user', {
+      extensions: {
+        error,
+      },
+    });
+  }
+}

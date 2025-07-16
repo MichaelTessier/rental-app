@@ -24,3 +24,7 @@ query Me {
     updatedAt
   }
 }
+
+mutation Logout {
+  logout
+}

@@ -26,6 +26,7 @@ export const userTypeDefs = /* GraphQL */ `
 
   type Mutation {
     login(input: LoginInput): User
+    logout: Boolean
     registerUser(input: UserInput!): User!
   }
 

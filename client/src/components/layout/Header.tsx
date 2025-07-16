@@ -1,4 +1,4 @@
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import {
   Sheet,
   SheetTrigger,
@@ -21,9 +21,24 @@ import { useReactiveVar } from "@apollo/client";
 import { Skeleton } from "../shadcn/skeleton";
 import UserMobileMenu from "../navigation/UserMobileMenu";
 import UserAvatar from "../user/UserAvatar";
+import { useLogoutMutation } from "@/graphql/__generated__/types";
 
 const Header = () => {
   const userState = useReactiveVar(userStore);
+
+  const [logoutMutation] = useLogoutMutation()
+
+  const navigate = useNavigate()
+
+  function handleLogout() {
+    logoutMutation(
+      {
+        onCompleted: () => {
+          navigate(0)
+        }
+      }
+    )
+  }
 
   return (
     <div className="flex items-center justify-between px-5 py-2 bg-white dark:bg-gray-800 border">
@@ -61,7 +76,7 @@ const Header = () => {
                 <DropdownMenuItem>Profile</DropdownMenuItem>
               </Link>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>Logout</DropdownMenuItem>
+              <DropdownMenuItem onClick={handleLogout}>Logout</DropdownMenuItem>
 
             </DropdownMenuContent>
           </DropdownMenu>
@@ -116,6 +131,7 @@ const Header = () => {
                 <DropdownMenuSeparator />
                 <Link
                   to="#"
+                  onClick={handleLogout}
                   className="text-lg font-medium hover:underline underline-offset-4 mt-3"
                 >
                   Logout

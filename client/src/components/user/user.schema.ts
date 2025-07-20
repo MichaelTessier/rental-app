@@ -1,6 +1,6 @@
 import { z } from "zod"
 
-export const authSchema = z.object({
+const userSchema = z.object({
   firstName: z.string({
     required_error: "firstName is required.",
   }).min(2, {
@@ -20,10 +20,10 @@ export const authSchema = z.object({
     required_error: "Password is required.",
   }).min(6, {
     message: "Password must be at least 6 characters.",
-  }),
+  })
 })
  
-export const registerSchema = authSchema.pick({
+export const registerSchema = userSchema.pick({
   firstName: true,
   lastName: true,
   email: true,
@@ -32,17 +32,40 @@ export const registerSchema = authSchema.pick({
 
 export type RegisterSchema = z.infer<typeof registerSchema>
 
-export const loginSchema = authSchema.pick({
+export const loginSchema = userSchema.pick({
   email: true,
   password: true,
 })
 
 export type LoginSchema = z.infer<typeof loginSchema>
 
-export const updateUserSchema = authSchema.pick({
+export const updateUserSchema = userSchema.pick({
   firstName: true,
   lastName: true,
   email: true,
 })
 
 export type UpdateUserSchema = z.infer<typeof updateUserSchema>
+
+
+export const updatePasswordSchema = userSchema.pick({
+  password: true,
+}).extend({
+  newPassword: z.string({
+    required_error: "new password is required.",
+  }).min(6, {
+    message: "New Password must be at least 6 characters.",
+  }),
+  confirmPassword: z.string({
+    required_error: "new password is required.",
+  }).min(6, {
+    message: "Confirmation Password must be at least 6 characters.",
+  }),
+}).refine((values) => values.newPassword === values.confirmPassword, {
+  message: 'Password don\'t match',
+  path: ['confirmPassword']
+})
+
+export type UpdatePasswordSchema = z.infer<typeof updatePasswordSchema>
+
+

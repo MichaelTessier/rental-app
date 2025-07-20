@@ -1,5 +1,5 @@
 import { GraphQLError } from "graphql";
-import { LoginInput, Maybe, User, RegisterUserInput, UpdateUserInput } from "../__generated__/graphql";
+import { LoginInput, Maybe, User, RegisterUserInput, UpdateUserInput, UpdatePasswordInput } from "../__generated__/graphql";
 import { UserModel } from "./user.models";
 import { Context } from "../../apollo/context";
 import { NotFoundError, UnauthorizedError } from "../error";
@@ -92,6 +92,34 @@ export const updateUser = async(input: UpdateUserInput, context: Context): Promi
     return true
   } catch (error) {
     throw new GraphQLError('Error updating user', {
+      extensions: {
+        error,
+      },
+    });
+  }
+}
+
+export const updatePassword = async(input: UpdatePasswordInput, context: Context): Promise<boolean> => {
+  try {
+    const user = await UserModel.findById(context.user?.id).select('+password')
+    
+    if(!user) {
+      throw new NotFoundError('User not found');
+    }
+
+    const isPasswordMatched = await user.comparePassword(input.oldPassword)
+
+    if (!isPasswordMatched) {
+      throw new UnauthorizedError('Invalid password');
+    }
+
+    user.password = input.newPassword
+    
+    await user.save()
+    
+    return true
+  } catch (error) {
+    throw new GraphQLError('Error updating password', {
       extensions: {
         error,
       },

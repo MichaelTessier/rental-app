@@ -32,3 +32,7 @@ mutation Logout {
 mutation UpdateUser($input: UpdateUserInput!) {
   updateUser(input: $input)
 }
+
+mutation UpdatePassword($input: UpdatePasswordInput!) {
+  updatePassword(input: $input)
+}

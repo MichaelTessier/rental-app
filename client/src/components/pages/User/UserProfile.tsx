@@ -1,5 +1,6 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/shadcn/tabs"
 import UpdateProfile from "@/components/user/UpdateProfile";
+import UpdatePassword from "@/components/user/UpdatePassword";
 
 function UserProfile()  {  
   return (
@@ -13,7 +14,9 @@ function UserProfile()  {
         <TabsContent value="profile">
           <UpdateProfile />
         </TabsContent>
-        <TabsContent value="password">Change your password here.</TabsContent>
+        <TabsContent value="password">
+          <UpdatePassword />
+        </TabsContent>
         <TabsContent value="avatar">Change your avatar here.</TabsContent>
       </Tabs>
     </main>

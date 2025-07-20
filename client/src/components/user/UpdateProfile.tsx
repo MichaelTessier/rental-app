@@ -23,7 +23,6 @@ import { useReactiveVar } from "@apollo/client";
 
 const UpdateProfile = () => {
   const userState = useReactiveVar(userStore);
-  
 
   const form = useForm<UpdateUserSchema>(
     {
@@ -54,15 +53,16 @@ const UpdateProfile = () => {
       onCompleted: () => {
         toast.success("Update successful!");
         if(!userState.user) return
-          userStore({
-            ...userState,
-            user: {
-              ...userState.user,
-              firstName: payload.firstName,
-              lastName: payload.lastName,
-              email: payload.email,
-            }
-          })
+        
+        userStore({
+          ...userState,
+          user: {
+            ...userState.user,
+            firstName: payload.firstName,
+            lastName: payload.lastName,
+            email: payload.email,
+          }
+        })
         // Redirect to login or home page
       }
     })

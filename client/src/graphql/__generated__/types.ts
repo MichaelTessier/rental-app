@@ -175,6 +175,7 @@ export type Mutation = {
   logout?: Maybe<Scalars['Boolean']['output']>;
   registerUser: User;
   updateCar?: Maybe<Scalars['Boolean']['output']>;
+  updateUser?: Maybe<Scalars['Boolean']['output']>;
 };
 
 
@@ -194,13 +195,18 @@ export type MutationLoginArgs = {
 
 
 export type MutationRegisterUserArgs = {
-  input: UserInput;
+  input: RegisterUserInput;
 };
 
 
 export type MutationUpdateCarArgs = {
   id: Scalars['ObjectID']['input'];
   input: CarInput;
+};
+
+
+export type MutationUpdateUserArgs = {
+  input: UpdateUserInput;
 };
 
 export type Pagination = {
@@ -240,9 +246,24 @@ export type Ratings = {
   value: Scalars['Float']['output'];
 };
 
+export type RegisterUserInput = {
+  email: Scalars['EmailAddress']['input'];
+  firstName: Scalars['String']['input'];
+  lastName: Scalars['String']['input'];
+  password: Scalars['String']['input'];
+};
+
 export type RentPerDayInput = {
   max?: InputMaybe<Scalars['Int']['input']>;
   min?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type UpdateUserInput = {
+  avatar?: InputMaybe<ImageInput>;
+  email: Scalars['EmailAddress']['input'];
+  firstName: Scalars['String']['input'];
+  lastName: Scalars['String']['input'];
+  phoneNumber?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type User = {
@@ -258,16 +279,6 @@ export type User = {
   resetPasswordToken?: Maybe<Scalars['String']['output']>;
   role?: Maybe<Array<UserRole>>;
   updatedAt: Scalars['String']['output'];
-};
-
-export type UserInput = {
-  avatar?: InputMaybe<ImageInput>;
-  email: Scalars['EmailAddress']['input'];
-  firstName: Scalars['String']['input'];
-  lastName: Scalars['String']['input'];
-  password: Scalars['String']['input'];
-  phoneNumber?: InputMaybe<Scalars['String']['input']>;
-  role?: InputMaybe<Array<UserRole>>;
 };
 
 export enum UserRole {
@@ -296,7 +307,7 @@ export type PaginationFragment = { __typename?: 'Pagination', total: number, pag
 export type CarFragment = { __typename?: 'Car', id: string, name: string, description: string, status: CarStatus, rentPerDay: number, address: string, year: number, power: number, millage: number, brand: CarBrand, transmission: CarTransmission, fuelType: CarFuelType, seats: CarSeats, doors: CarDoors, category: CarCategory, createdAt: string, updatedAt: string, images?: Array<{ __typename?: 'Image', url: string, publicId: string }> | null, ratings?: { __typename?: 'Ratings', count: number, value: number } | null };
 
 export type RegisterUserMutationVariables = Exact<{
-  input: UserInput;
+  input: RegisterUserInput;
 }>;
 
 
@@ -318,6 +329,13 @@ export type LogoutMutationVariables = Exact<{ [key: string]: never; }>;
 
 
 export type LogoutMutation = { __typename?: 'Mutation', logout?: boolean | null };
+
+export type UpdateUserMutationVariables = Exact<{
+  input: UpdateUserInput;
+}>;
+
+
+export type UpdateUserMutation = { __typename?: 'Mutation', updateUser?: boolean | null };
 
 export const CarListFragmentDoc = gql`
     fragment CarList on Car {
@@ -460,7 +478,7 @@ export type GetCarLazyQueryHookResult = ReturnType<typeof useGetCarLazyQuery>;
 export type GetCarSuspenseQueryHookResult = ReturnType<typeof useGetCarSuspenseQuery>;
 export type GetCarQueryResult = Apollo.QueryResult<GetCarQuery, GetCarQueryVariables>;
 export const RegisterUserDocument = gql`
-    mutation registerUser($input: UserInput!) {
+    mutation registerUser($input: RegisterUserInput!) {
   registerUser(input: $input) {
     id
   }
@@ -603,3 +621,34 @@ export function useLogoutMutation(baseOptions?: Apollo.MutationHookOptions<Logou
 export type LogoutMutationHookResult = ReturnType<typeof useLogoutMutation>;
 export type LogoutMutationResult = Apollo.MutationResult<LogoutMutation>;
 export type LogoutMutationOptions = Apollo.BaseMutationOptions<LogoutMutation, LogoutMutationVariables>;
+export const UpdateUserDocument = gql`
+    mutation UpdateUser($input: UpdateUserInput!) {
+  updateUser(input: $input)
+}
+    `;
+export type UpdateUserMutationFn = Apollo.MutationFunction<UpdateUserMutation, UpdateUserMutationVariables>;
+
+/**
+ * __useUpdateUserMutation__
+ *
+ * To run a mutation, you first call `useUpdateUserMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateUserMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateUserMutation, { data, loading, error }] = useUpdateUserMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdateUserMutation(baseOptions?: Apollo.MutationHookOptions<UpdateUserMutation, UpdateUserMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateUserMutation, UpdateUserMutationVariables>(UpdateUserDocument, options);
+      }
+export type UpdateUserMutationHookResult = ReturnType<typeof useUpdateUserMutation>;
+export type UpdateUserMutationResult = Apollo.MutationResult<UpdateUserMutation>;
+export type UpdateUserMutationOptions = Apollo.BaseMutationOptions<UpdateUserMutation, UpdateUserMutationVariables>;

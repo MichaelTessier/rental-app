@@ -1,26 +1,11 @@
 import { GraphQLError } from "graphql";
-import { LoginInput, Maybe, User, UserInput } from "../__generated__/graphql";
+import { LoginInput, Maybe, User, RegisterUserInput, UpdateUserInput } from "../__generated__/graphql";
 import { UserModel } from "./user.models";
 import { Context } from "../../apollo/context";
 import { NotFoundError, UnauthorizedError } from "../error";
 import jwt from "jsonwebtoken";
 import jwtConfig from "../../services/jwt/jwt.config";
 import { USER_TOKEN_COOKIE_NAME } from "./user.const";
-
-export const registerUser = async(user: Maybe<UserInput> | undefined): Promise<User> => {
-  try {
-    const newUser = UserModel.create(user)
-
-    return newUser
-  } catch (error) {
-    throw new GraphQLError('Error creating user', {
-      extensions: {
-        error,
-      },
-    });
-  }
-
-}
 
 export const login = async(input: Maybe<LoginInput> | undefined, context: Context): Promise<User> => {
   try {
@@ -64,7 +49,6 @@ export const login = async(input: Maybe<LoginInput> | undefined, context: Contex
   }
 }
 
-
 export const logout = (context: Context): boolean => {
   try {
     context.res.cookie(USER_TOKEN_COOKIE_NAME, null, {
@@ -74,6 +58,40 @@ export const logout = (context: Context): boolean => {
     return true;
   } catch (error) {
     throw new GraphQLError('Error logout user', {
+      extensions: {
+        error,
+      },
+    });
+  }
+}
+
+export const registerUser = async(user: RegisterUserInput): Promise<User> => {
+  try {
+    const newUser = await UserModel.create(user)
+
+    return newUser
+  } catch (error) {
+    throw new GraphQLError('Error creating user', {
+      extensions: {
+        error,
+      },
+    });
+  }
+}
+
+export const updateUser = async(input: UpdateUserInput, context: Context): Promise<boolean> => {
+  try {
+    const user = await UserModel.findById(context.user?.id)
+    
+    if(!user) {
+      throw new NotFoundError('User not found');
+    }
+    
+    await user.updateOne(input)
+    
+    return true
+  } catch (error) {
+    throw new GraphQLError('Error updating user', {
       extensions: {
         error,
       },

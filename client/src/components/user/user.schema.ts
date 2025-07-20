@@ -38,3 +38,11 @@ export const loginSchema = authSchema.pick({
 })
 
 export type LoginSchema = z.infer<typeof loginSchema>
+
+export const updateUserSchema = authSchema.pick({
+  firstName: true,
+  lastName: true,
+  email: true,
+})
+
+export type UpdateUserSchema = z.infer<typeof updateUserSchema>

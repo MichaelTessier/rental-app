@@ -34,3 +34,6 @@
   - Display user on client
   - Add Protected routes
   - Add Logout
+- UPDATE USER
+  - Add update user mutation
+  - Add Update Profile view (name, email, etc...) 

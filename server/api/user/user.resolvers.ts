@@ -1,6 +1,6 @@
 import { Context } from "../../apollo/context";
-import { MutationRegisterUserArgs, MutationLoginArgs } from "../__generated__/graphql";
-import { registerUser, login, logout  } from "./user.controllers";
+import { MutationRegisterUserArgs, MutationLoginArgs, MutationUpdateUserArgs, User } from "../__generated__/graphql";
+import { registerUser, login, logout, updateUser  } from "./user.controllers";
 
 export const userResolvers = {
   Query: {
@@ -10,14 +10,17 @@ export const userResolvers = {
   },
 
   Mutation: {
-    registerUser: async(_root: {}, args: MutationRegisterUserArgs) => {
-      return await registerUser(args.input);    
-    },
-    login: async(_root: {}, args: MutationLoginArgs, context: Context) => {
+    login: async(_root: {}, args: MutationLoginArgs, context: Context): Promise<User> => {
       return login(args.input, context);
     },
-    logout: async(_root: {}, _args: {}, context: Context) => {
+    logout: async(_root: {}, _args: {}, context: Context): Promise<boolean>  => {
       return logout(context);
-    }
+    },
+    updateUser: async(_root: {}, args: MutationUpdateUserArgs, context: Context): Promise<boolean> => {
+      return await updateUser(args.input, context);    
+    },
+    registerUser: async(_root: {}, args: MutationRegisterUserArgs): Promise<User> => {
+      return await registerUser(args.input);    
+    },
   }
 }

@@ -1,9 +1,22 @@
-function UserProfile()  {
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/shadcn/tabs"
+import UpdateProfile from "@/components/user/UpdateProfile";
+
+function UserProfile()  {  
   return (
-    <div>
-      <h1 className="text-2xl font-bold">User Profile</h1>
-      {/* Profile content goes here */}
-    </div>
+    <main className="flex min-h-screen items-center justify-center flex-1 flex-col">
+      <Tabs defaultValue="profile" className="w-[400px]">
+        <TabsList>
+          <TabsTrigger value="profile">Profile</TabsTrigger>
+          <TabsTrigger value="password">Password</TabsTrigger>
+          <TabsTrigger value="avatar">Avatar</TabsTrigger>
+        </TabsList>
+        <TabsContent value="profile">
+          <UpdateProfile />
+        </TabsContent>
+        <TabsContent value="password">Change your password here.</TabsContent>
+        <TabsContent value="avatar">Change your avatar here.</TabsContent>
+      </Tabs>
+    </main>
   );
 }
 

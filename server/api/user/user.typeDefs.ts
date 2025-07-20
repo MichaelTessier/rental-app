@@ -27,17 +27,23 @@ export const userTypeDefs = /* GraphQL */ `
   type Mutation {
     login(input: LoginInput): User
     logout: Boolean
-    registerUser(input: UserInput!): User!
+    registerUser(input: RegisterUserInput!): User!
+    updateUser(input: UpdateUserInput!): Boolean
   }
 
-  input UserInput {
-    avatar: ImageInput
+  input RegisterUserInput {
     email: EmailAddress!
     firstName: String!
     lastName: String!
     password: String!
+  }
+
+  input UpdateUserInput {
+    avatar: ImageInput
+    email: EmailAddress!
+    firstName: String!
+    lastName: String!
     phoneNumber: String
-    role: [UserRole!]
   }
 
   input LoginInput {

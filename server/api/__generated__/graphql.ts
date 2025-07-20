@@ -171,8 +171,10 @@ export type Mutation = {
   createCar?: Maybe<Car>;
   deleteCar?: Maybe<Scalars['Boolean']['output']>;
   login?: Maybe<User>;
+  logout?: Maybe<Scalars['Boolean']['output']>;
   registerUser: User;
   updateCar?: Maybe<Scalars['Boolean']['output']>;
+  updateUser?: Maybe<Scalars['Boolean']['output']>;
 };
 
 
@@ -192,13 +194,18 @@ export type MutationLoginArgs = {
 
 
 export type MutationRegisterUserArgs = {
-  input: UserInput;
+  input: RegisterUserInput;
 };
 
 
 export type MutationUpdateCarArgs = {
   id: Scalars['ObjectID']['input'];
   input: CarInput;
+};
+
+
+export type MutationUpdateUserArgs = {
+  input: UpdateUserInput;
 };
 
 export type Pagination = {
@@ -238,9 +245,24 @@ export type Ratings = {
   value: Scalars['Float']['output'];
 };
 
+export type RegisterUserInput = {
+  email: Scalars['EmailAddress']['input'];
+  firstName: Scalars['String']['input'];
+  lastName: Scalars['String']['input'];
+  password: Scalars['String']['input'];
+};
+
 export type RentPerDayInput = {
   max?: InputMaybe<Scalars['Int']['input']>;
   min?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type UpdateUserInput = {
+  avatar?: InputMaybe<ImageInput>;
+  email: Scalars['EmailAddress']['input'];
+  firstName: Scalars['String']['input'];
+  lastName: Scalars['String']['input'];
+  phoneNumber?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type User = {
@@ -256,16 +278,6 @@ export type User = {
   resetPasswordToken?: Maybe<Scalars['String']['output']>;
   role?: Maybe<Array<UserRole>>;
   updatedAt: Scalars['String']['output'];
-};
-
-export type UserInput = {
-  avatar?: InputMaybe<ImageInput>;
-  email: Scalars['EmailAddress']['input'];
-  firstName: Scalars['String']['input'];
-  lastName: Scalars['String']['input'];
-  password: Scalars['String']['input'];
-  phoneNumber?: InputMaybe<Scalars['String']['input']>;
-  role?: InputMaybe<Array<UserRole>>;
 };
 
 export enum UserRole {
@@ -370,10 +382,11 @@ export type ResolversTypes = {
   Pagination: ResolverTypeWrapper<Pagination>;
   Query: ResolverTypeWrapper<{}>;
   Ratings: ResolverTypeWrapper<Ratings>;
+  RegisterUserInput: RegisterUserInput;
   RentPerDayInput: RentPerDayInput;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
+  UpdateUserInput: UpdateUserInput;
   User: ResolverTypeWrapper<User>;
-  UserInput: UserInput;
   UserRole: UserRole;
 };
 
@@ -397,10 +410,11 @@ export type ResolversParentTypes = {
   Pagination: Pagination;
   Query: {};
   Ratings: Ratings;
+  RegisterUserInput: RegisterUserInput;
   RentPerDayInput: RentPerDayInput;
   String: Scalars['String']['output'];
+  UpdateUserInput: UpdateUserInput;
   User: User;
-  UserInput: UserInput;
 };
 
 export type CarResolvers<ContextType = any, ParentType extends ResolversParentTypes['Car'] = ResolversParentTypes['Car']> = {
@@ -451,8 +465,10 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   createCar?: Resolver<Maybe<ResolversTypes['Car']>, ParentType, ContextType, RequireFields<MutationCreateCarArgs, 'input'>>;
   deleteCar?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationDeleteCarArgs, 'id'>>;
   login?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, Partial<MutationLoginArgs>>;
+  logout?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   registerUser?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationRegisterUserArgs, 'input'>>;
   updateCar?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationUpdateCarArgs, 'id' | 'input'>>;
+  updateUser?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationUpdateUserArgs, 'input'>>;
 };
 
 export interface ObjectIdScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['ObjectID'], any> {

@@ -38,3 +38,4 @@
   - Add update user mutation
   - Add Update Profile view (name, email, etc...) 
   - Add Update Password
+  - Init cloudinary

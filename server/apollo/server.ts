@@ -4,7 +4,7 @@ import { schema } from "./schema"
 import { formatError } from "../api/error/formatError";
 import { Context } from "./context";
 import { applyMiddleware } from "graphql-middleware";
-import { permissions } from "../api/middlewares/permissions.middleware";
+import { permissions } from "./middlewares/permissions.middleware";
 
 export async function startApolloServer() {
   const apolloServer = new ApolloServer<Context>({

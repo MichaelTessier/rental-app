@@ -1,11 +1,7 @@
-import { Link } from "react-router-dom";
 import { Button } from "@/components/shadcn/button";
 import {
   Card,
   CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
 } from "@/components/shadcn/card";
 import {
   Form,
@@ -16,41 +12,36 @@ import {
   FormMessage,
 } from "@/components/shadcn/form";
 import { Input } from "@/components/shadcn/input";
-import { MailPlus } from "lucide-react";
-
 import { useForm } from "react-hook-form"
-import { useRegisterUserMutation } from "@/graphql/__generated__/types";
+import { useUpdatePasswordMutation } from "@/graphql/__generated__/types";
 import Loader from "@/components/ui/Loader";
 import { toast } from "sonner"
-import { registerSchema, RegisterSchema } from "./auth.schema";
+import { UpdatePasswordSchema, updatePasswordSchema } from "./user.schema";
 import { zodResolver } from "@hookform/resolvers/zod"
 
-const RegisterForm = () => {
-  const form = useForm<RegisterSchema>(
+const UpdateProfile = () => {
+
+  const form = useForm<UpdatePasswordSchema>(
     {
-      resolver: zodResolver(registerSchema),
+      resolver: zodResolver(updatePasswordSchema),
     }
   );
 
-  const [registerUserMutation, { loading} ] = useRegisterUserMutation()
+  const [updatePasswordMutation, { loading} ] = useUpdatePasswordMutation()
 
-
-  async function onSubmit(payload: RegisterSchema) {
-
-    await registerUserMutation({
+  async function onSubmit(payload: UpdatePasswordSchema) {
+    await updatePasswordMutation({
       variables: {
         input: {
-          firstName: payload.firstName,
-          lastName: payload.lastName,
-          email: payload.email,
-          password: payload.password,
+          oldPassword: payload.password,
+          newPassword: payload.confirmPassword,
         }
       },
       onError: () => {
-        toast.error(`Error during registration`);
+        toast.error(`Error during update`);
       },
       onCompleted: () => {
-        toast.success("Registration successful! You can now log in.");
+        toast.success("Update successful!");
         // Redirect to login or home page
       }
     })
@@ -64,66 +55,9 @@ const RegisterForm = () => {
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <div className="flex flex-1 flex-col gap-4 bg-muted/40 justify-center ">
             <Card className="mx-auto w-full max-w-lg shadow-lg">
-              <CardHeader>
-                {/* <CardTitle className="text-2xl">Sign Up</CardTitle> */}
-                {/* <CardDescription>
-                  Enter your information to create an account
-                </CardDescription> */}
-              </CardHeader>
               <CardContent>
                 <div className="grid gap-4">
                   <div className="grid gap-2">
-                    <FormField 
-                      control={form.control}
-                      name="firstName"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>First Name</FormLabel>
-                          <FormControl>
-                            <Input
-                              placeholder="Enter your first name"
-                              {...field}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    <FormField 
-                      control={form.control}
-                      name="lastName"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Last Name</FormLabel>
-                          <FormControl>
-                            <Input
-                              placeholder="Enter your last name"
-                              {...field}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    <FormField 
-                      control={form.control}
-                      name="email"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Email</FormLabel>
-                          <FormControl>
-                            <Input
-                              placeholder="Enter your email"
-                              {...field}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
                     <FormField 
                       control={form.control}
                       name="password"
@@ -141,19 +75,47 @@ const RegisterForm = () => {
                         </FormItem>
                       )}
                     />
+
+                    <FormField 
+                      control={form.control}
+                      name="newPassword"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>New Password</FormLabel>
+                          <FormControl>
+                            <Input
+                              type="password"
+                              placeholder="Enter your new password"
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField 
+                      control={form.control}
+                      name="confirmPassword"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Confirmation Password</FormLabel>
+                          <FormControl>
+                            <Input
+                              type="password"
+                              placeholder="Enter confirmation of new password"
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
                   </div>
                   <Button type="submit" className="w-full">
-                    <div className="h-4 w-4 ml-2" >
-                      { loading ? <Loader  /> : <MailPlus /> }
-                    </div>
-                    Sign Up 
+                    { loading ? <div className="h-4 w-4 ml-2" ><Loader  /></div> : null }
+                    Save
                   </Button>
-                </div>
-                <div className="mt-4 text-center text-sm">
-                  Already have an account?{" "}
-                  <Link to="/login" className="underline">
-                    Sign in
-                  </Link>
                 </div>
               </CardContent>
             </Card>
@@ -166,4 +128,4 @@ const RegisterForm = () => {
   );
 };
 
-export default RegisterForm;
+export default UpdateProfile;

@@ -29,7 +29,9 @@ app.listen(appConfig.port, async () => {
       origin:[ "http://localhost:5173"], 
       credentials: true,
     }),
-    json(),
+    json({
+      // limit: '10mb'
+    }),
     expressMiddleware(apolloServer, {
       context: ({ req, res }) => buildContext({ req, res }),
     })

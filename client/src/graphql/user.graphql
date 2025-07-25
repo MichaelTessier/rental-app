@@ -1,4 +1,4 @@
-mutation registerUser($input: UserInput!) {
+mutation registerUser($input: RegisterUserInput!) {
   registerUser(input: $input) {
     id
   }
@@ -22,9 +22,26 @@ query Me {
     resetPasswordToken
     role
     updatedAt
+    avatar {
+      url
+    }
   }
 }
 
 mutation Logout {
   logout
+}
+
+mutation UpdateUser($input: UpdateUserInput!) {
+  updateUser(input: $input)
+}
+
+mutation UpdatePassword($input: UpdatePasswordInput!) {
+  updatePassword(input: $input)
+}
+
+mutation UpdateAvatar($input: UpdateAvatarInput!) {
+  updateAvatar(input: $input) {
+    ...Image
+  }
 }

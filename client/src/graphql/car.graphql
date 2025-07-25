@@ -20,8 +20,7 @@ fragment CarList on Car {
   category
   fuelType
   images {
-    url
-    publicId
+    ...Image
   }
   id
   rentPerDay
@@ -55,8 +54,7 @@ fragment Car on Car {
   doors
   category
   images {
-    url
-    publicId
+    ...Image
   }
   createdAt
   updatedAt

@@ -174,6 +174,7 @@ export type Mutation = {
   login?: Maybe<User>;
   logout?: Maybe<Scalars['Boolean']['output']>;
   registerUser: User;
+  updateAvatar?: Maybe<Image>;
   updateCar?: Maybe<Scalars['Boolean']['output']>;
   updatePassword?: Maybe<Scalars['Boolean']['output']>;
   updateUser?: Maybe<Scalars['Boolean']['output']>;
@@ -197,6 +198,11 @@ export type MutationLoginArgs = {
 
 export type MutationRegisterUserArgs = {
   input: RegisterUserInput;
+};
+
+
+export type MutationUpdateAvatarArgs = {
+  input: UpdateAvatarInput;
 };
 
 
@@ -264,6 +270,10 @@ export type RentPerDayInput = {
   min?: InputMaybe<Scalars['Int']['input']>;
 };
 
+export type UpdateAvatarInput = {
+  image: Scalars['String']['input'];
+};
+
 export type UpdatePasswordInput = {
   newPassword: Scalars['String']['input'];
   oldPassword: Scalars['String']['input'];
@@ -317,6 +327,8 @@ export type PaginationFragment = { __typename?: 'Pagination', total: number, pag
 
 export type CarFragment = { __typename?: 'Car', id: string, name: string, description: string, status: CarStatus, rentPerDay: number, address: string, year: number, power: number, millage: number, brand: CarBrand, transmission: CarTransmission, fuelType: CarFuelType, seats: CarSeats, doors: CarDoors, category: CarCategory, createdAt: string, updatedAt: string, images?: Array<{ __typename?: 'Image', url: string, publicId: string }> | null, ratings?: { __typename?: 'Ratings', count: number, value: number } | null };
 
+export type ImageFragment = { __typename?: 'Image', url: string, publicId: string };
+
 export type RegisterUserMutationVariables = Exact<{
   input: RegisterUserInput;
 }>;
@@ -334,7 +346,7 @@ export type LoginMutation = { __typename?: 'Mutation', login?: { __typename?: 'U
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MeQuery = { __typename?: 'Query', me?: { __typename?: 'User', id: string, createdAt: string, email: string, firstName: string, lastName: string, phoneNumber?: string | null, resetPasswordExpires?: Date | null, resetPasswordToken?: string | null, role?: Array<UserRole> | null, updatedAt: string } | null };
+export type MeQuery = { __typename?: 'Query', me?: { __typename?: 'User', id: string, createdAt: string, email: string, firstName: string, lastName: string, phoneNumber?: string | null, resetPasswordExpires?: Date | null, resetPasswordToken?: string | null, role?: Array<UserRole> | null, updatedAt: string, avatar?: { __typename?: 'Image', url: string } | null } | null };
 
 export type LogoutMutationVariables = Exact<{ [key: string]: never; }>;
 
@@ -355,14 +367,26 @@ export type UpdatePasswordMutationVariables = Exact<{
 
 export type UpdatePasswordMutation = { __typename?: 'Mutation', updatePassword?: boolean | null };
 
+export type UpdateAvatarMutationVariables = Exact<{
+  input: UpdateAvatarInput;
+}>;
+
+
+export type UpdateAvatarMutation = { __typename?: 'Mutation', updateAvatar?: { __typename?: 'Image', url: string, publicId: string } | null };
+
+export const ImageFragmentDoc = gql`
+    fragment Image on Image {
+  url
+  publicId
+}
+    `;
 export const CarListFragmentDoc = gql`
     fragment CarList on Car {
   name
   category
   fuelType
   images {
-    url
-    publicId
+    ...Image
   }
   id
   rentPerDay
@@ -372,7 +396,7 @@ export const CarListFragmentDoc = gql`
     value
   }
 }
-    `;
+    ${ImageFragmentDoc}`;
 export const PaginationFragmentDoc = gql`
     fragment Pagination on Pagination {
   total
@@ -398,8 +422,7 @@ export const CarFragmentDoc = gql`
   doors
   category
   images {
-    url
-    publicId
+    ...Image
   }
   createdAt
   updatedAt
@@ -408,7 +431,7 @@ export const CarFragmentDoc = gql`
     value
   }
 }
-    `;
+    ${ImageFragmentDoc}`;
 export const GetCarsDocument = gql`
     query getCars($input: CarsInput) {
   cars(input: $input) {
@@ -574,6 +597,9 @@ export const MeDocument = gql`
     resetPasswordToken
     role
     updatedAt
+    avatar {
+      url
+    }
   }
 }
     `;
@@ -701,3 +727,36 @@ export function useUpdatePasswordMutation(baseOptions?: Apollo.MutationHookOptio
 export type UpdatePasswordMutationHookResult = ReturnType<typeof useUpdatePasswordMutation>;
 export type UpdatePasswordMutationResult = Apollo.MutationResult<UpdatePasswordMutation>;
 export type UpdatePasswordMutationOptions = Apollo.BaseMutationOptions<UpdatePasswordMutation, UpdatePasswordMutationVariables>;
+export const UpdateAvatarDocument = gql`
+    mutation UpdateAvatar($input: UpdateAvatarInput!) {
+  updateAvatar(input: $input) {
+    ...Image
+  }
+}
+    ${ImageFragmentDoc}`;
+export type UpdateAvatarMutationFn = Apollo.MutationFunction<UpdateAvatarMutation, UpdateAvatarMutationVariables>;
+
+/**
+ * __useUpdateAvatarMutation__
+ *
+ * To run a mutation, you first call `useUpdateAvatarMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateAvatarMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateAvatarMutation, { data, loading, error }] = useUpdateAvatarMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdateAvatarMutation(baseOptions?: Apollo.MutationHookOptions<UpdateAvatarMutation, UpdateAvatarMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateAvatarMutation, UpdateAvatarMutationVariables>(UpdateAvatarDocument, options);
+      }
+export type UpdateAvatarMutationHookResult = ReturnType<typeof useUpdateAvatarMutation>;
+export type UpdateAvatarMutationResult = Apollo.MutationResult<UpdateAvatarMutation>;
+export type UpdateAvatarMutationOptions = Apollo.BaseMutationOptions<UpdateAvatarMutation, UpdateAvatarMutationVariables>;

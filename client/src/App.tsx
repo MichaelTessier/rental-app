@@ -13,10 +13,12 @@ import Dashboard from "./components/pages/Admin/AdminDashboard"
 import ProtectedRoute from "./components/navigation/ProtectedRoute"
 import UserProfile from "./components/pages/User/UserProfile"
 import Loader from "./components/ui/Loader"
+// import { useReactiveVar } from "@apollo/client"
 
 
 function App() {
   const [canAccess, setCanAccess] = useState<boolean>(false);
+  // const userState = useReactiveVar(userStore);
 
   const { loading } = useMeQuery({
     onCompleted: (data) => {

@@ -1,11 +1,12 @@
 import { GraphQLError } from "graphql";
-import { LoginInput, Maybe, User, RegisterUserInput, UpdateUserInput, UpdatePasswordInput } from "../__generated__/graphql";
+import { LoginInput, Maybe, User, RegisterUserInput, UpdateUserInput, UpdatePasswordInput, UpdateAvatarInput, Image } from "../__generated__/graphql";
 import { UserModel } from "./user.models";
 import { Context } from "../../apollo/context";
 import { NotFoundError, UnauthorizedError } from "../error";
 import jwt from "jsonwebtoken";
 import jwtConfig from "../../services/jwt/jwt.config";
 import { USER_TOKEN_COOKIE_NAME } from "./user.const";
+import { deleteImage, uploadImage } from "../../services/cloudinary/cloudinary.service";
 
 export const login = async(input: Maybe<LoginInput> | undefined, context: Context): Promise<User> => {
   try {
@@ -120,6 +121,40 @@ export const updatePassword = async(input: UpdatePasswordInput, context: Context
     return true
   } catch (error) {
     throw new GraphQLError('Error updating password', {
+      extensions: {
+        error,
+      },
+    });
+  }
+}
+
+
+export const updateAvatar = async(input: UpdateAvatarInput, context: Context): Promise<Image> => {
+  try {
+    const user = await UserModel.findById(context.user?.id)
+    
+    if(!user) {
+      throw new NotFoundError('User not found');
+    }
+
+    const newAvatar = await uploadImage(input.image, 'rental-app/avatars')
+
+    if(user.avatar?.publicId) {
+      await deleteImage(user.avatar.publicId)
+    }
+
+    user.avatar = {
+      url: newAvatar.url,
+      publicId: newAvatar.publicId
+    }
+    
+    console.log("🚀 ~ updateAvatar ~ user:", user)
+    
+    await user.save()
+    
+    return newAvatar
+  } catch (error) {
+    throw new GraphQLError('Error updating avatar', {
       extensions: {
         error,
       },

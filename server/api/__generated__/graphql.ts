@@ -173,6 +173,7 @@ export type Mutation = {
   login?: Maybe<User>;
   logout?: Maybe<Scalars['Boolean']['output']>;
   registerUser: User;
+  updateAvatar?: Maybe<Image>;
   updateCar?: Maybe<Scalars['Boolean']['output']>;
   updatePassword?: Maybe<Scalars['Boolean']['output']>;
   updateUser?: Maybe<Scalars['Boolean']['output']>;
@@ -196,6 +197,11 @@ export type MutationLoginArgs = {
 
 export type MutationRegisterUserArgs = {
   input: RegisterUserInput;
+};
+
+
+export type MutationUpdateAvatarArgs = {
+  input: UpdateAvatarInput;
 };
 
 
@@ -261,6 +267,10 @@ export type RegisterUserInput = {
 export type RentPerDayInput = {
   max?: InputMaybe<Scalars['Int']['input']>;
   min?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type UpdateAvatarInput = {
+  image: Scalars['String']['input'];
 };
 
 export type UpdatePasswordInput = {
@@ -396,6 +406,7 @@ export type ResolversTypes = {
   RegisterUserInput: RegisterUserInput;
   RentPerDayInput: RentPerDayInput;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
+  UpdateAvatarInput: UpdateAvatarInput;
   UpdatePasswordInput: UpdatePasswordInput;
   UpdateUserInput: UpdateUserInput;
   User: ResolverTypeWrapper<User>;
@@ -425,6 +436,7 @@ export type ResolversParentTypes = {
   RegisterUserInput: RegisterUserInput;
   RentPerDayInput: RentPerDayInput;
   String: Scalars['String']['output'];
+  UpdateAvatarInput: UpdateAvatarInput;
   UpdatePasswordInput: UpdatePasswordInput;
   UpdateUserInput: UpdateUserInput;
   User: User;
@@ -480,6 +492,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   login?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, Partial<MutationLoginArgs>>;
   logout?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   registerUser?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationRegisterUserArgs, 'input'>>;
+  updateAvatar?: Resolver<Maybe<ResolversTypes['Image']>, ParentType, ContextType, RequireFields<MutationUpdateAvatarArgs, 'input'>>;
   updateCar?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationUpdateCarArgs, 'id' | 'input'>>;
   updatePassword?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationUpdatePasswordArgs, 'input'>>;
   updateUser?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationUpdateUserArgs, 'input'>>;

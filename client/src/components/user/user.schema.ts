@@ -47,7 +47,6 @@ export const updateUserSchema = userSchema.pick({
 
 export type UpdateUserSchema = z.infer<typeof updateUserSchema>
 
-
 export const updatePasswordSchema = userSchema.pick({
   password: true,
 }).extend({
@@ -68,4 +67,15 @@ export const updatePasswordSchema = userSchema.pick({
 
 export type UpdatePasswordSchema = z.infer<typeof updatePasswordSchema>
 
+export const updateAvatarSchema = z.object({
+  avatar: z
+    .union([
+      z.instanceof(File, { message: "Image is required" }),
+      z.string()
+    ])
+    // .refine((value) => value instanceof File || typeof value === "string", {
+    //   message: "Image is required",
+    // }),
+})
 
+export type UpdateAvatarSchema = z.infer<typeof updateAvatarSchema>

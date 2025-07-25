@@ -39,3 +39,4 @@
   - Add Update Profile view (name, email, etc...) 
   - Add Update Password
   - Init cloudinary
+  - Add Update Avatar

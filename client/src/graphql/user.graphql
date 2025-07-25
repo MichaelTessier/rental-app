@@ -22,6 +22,9 @@ query Me {
     resetPasswordToken
     role
     updatedAt
+    avatar {
+      url
+    }
   }
 }
 
@@ -35,4 +38,10 @@ mutation UpdateUser($input: UpdateUserInput!) {
 
 mutation UpdatePassword($input: UpdatePasswordInput!) {
   updatePassword(input: $input)
+}
+
+mutation UpdateAvatar($input: UpdateAvatarInput!) {
+  updateAvatar(input: $input) {
+    ...Image
+  }
 }

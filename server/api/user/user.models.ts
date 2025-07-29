@@ -1,6 +1,7 @@
 import { Model, model, Schema, Document } from "mongoose";
 import { User, UserRole } from "../__generated__/graphql";
 import * as bcrypt from "bcrypt";
+import crypto from "crypto"
 
 
 export type UserDocument = Document & UserModel & UserModelMethods;
@@ -11,6 +12,7 @@ interface UserModel extends User {
 
 interface UserModelMethods {
   comparePassword(password: string): Promise<boolean>;
+  getResetPasswordToken(): string;
 }
 
 const userSchema = new Schema<UserModel, Model<UserModel>, UserModelMethods>({
@@ -72,6 +74,17 @@ userSchema.pre("save", async function (next) {
 
 userSchema.method('comparePassword', async function (password: string): Promise<boolean> {
   return bcrypt.compare(password, this.password);
+});
+
+userSchema.method('getResetPasswordToken', function (): string {
+  const resetToken = crypto.randomBytes(20).toString("hex")
+
+  this.resetPasswordToken = crypto.createHash('sha256').update(resetToken).digest('hex')
+
+  this.resetPasswordExpires = new Date(Date.now() + 30 * 60 * 1000)
+
+  
+  return resetToken
 });
 
 export const UserModel = model<UserModel, Model<UserModel, {}, {}, {}, UserDocument>>("User", userSchema, "users");

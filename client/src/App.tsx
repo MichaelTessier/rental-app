@@ -4,6 +4,7 @@ import Footer from './components/layout/Footer'
 import Home from "./components/pages/Home"
 import Car from "./components/pages/Car"
 import Register from "./components/pages/Auth/Register"
+import ForgotPassword from "./components/pages/Auth/ForgotPassword"
 import Login from "./components/pages/Auth/Login"
 import { Toaster } from "./components/shadcn/sonner"
 import { useMeQuery, UserRole } from "./graphql/__generated__/types"
@@ -61,6 +62,7 @@ function App() {
             <Route path="/car/:id" element={<Car />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/password-forgot" element={<ForgotPassword />} />
             <Route path="/admin/dashboard" element={
               <ProtectedRoute roles={[UserRole.Admin]}>
                 <Dashboard />

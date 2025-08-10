@@ -40,6 +40,10 @@ mutation UpdatePassword($input: UpdatePasswordInput!) {
   updatePassword(input: $input)
 }
 
+mutation ForgotPassword($input: ForgotPasswordInput!) {
+  forgotPassword(input: $input)
+}
+
 mutation UpdateAvatar($input: UpdateAvatarInput!) {
   updateAvatar(input: $input) {
     ...Image

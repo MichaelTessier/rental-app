@@ -150,6 +150,10 @@ export enum ErrorCode {
   Unauthorized = 'UNAUTHORIZED'
 }
 
+export type ForgotPasswordInput = {
+  email: Scalars['EmailAddress']['input'];
+};
+
 export type Image = {
   __typename?: 'Image';
   publicId: Scalars['String']['output'];
@@ -170,6 +174,7 @@ export type Mutation = {
   __typename?: 'Mutation';
   createCar?: Maybe<Car>;
   deleteCar?: Maybe<Scalars['Boolean']['output']>;
+  forgotPassword?: Maybe<Scalars['Boolean']['output']>;
   login?: Maybe<User>;
   logout?: Maybe<Scalars['Boolean']['output']>;
   registerUser: User;
@@ -187,6 +192,11 @@ export type MutationCreateCarArgs = {
 
 export type MutationDeleteCarArgs = {
   id: Scalars['ObjectID']['input'];
+};
+
+
+export type MutationForgotPasswordArgs = {
+  input: ForgotPasswordInput;
 };
 
 
@@ -394,6 +404,7 @@ export type ResolversTypes = {
   EmailAddress: ResolverTypeWrapper<Scalars['EmailAddress']['output']>;
   ErrorCode: ErrorCode;
   Float: ResolverTypeWrapper<Scalars['Float']['output']>;
+  ForgotPasswordInput: ForgotPasswordInput;
   Image: ResolverTypeWrapper<Image>;
   ImageInput: ImageInput;
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
@@ -424,6 +435,7 @@ export type ResolversParentTypes = {
   DateTime: Scalars['DateTime']['output'];
   EmailAddress: Scalars['EmailAddress']['output'];
   Float: Scalars['Float']['output'];
+  ForgotPasswordInput: ForgotPasswordInput;
   Image: Image;
   ImageInput: ImageInput;
   Int: Scalars['Int']['output'];
@@ -489,6 +501,7 @@ export type ImageResolvers<ContextType = any, ParentType extends ResolversParent
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   createCar?: Resolver<Maybe<ResolversTypes['Car']>, ParentType, ContextType, RequireFields<MutationCreateCarArgs, 'input'>>;
   deleteCar?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationDeleteCarArgs, 'id'>>;
+  forgotPassword?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationForgotPasswordArgs, 'input'>>;
   login?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, Partial<MutationLoginArgs>>;
   logout?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   registerUser?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationRegisterUserArgs, 'input'>>;

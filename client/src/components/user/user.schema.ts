@@ -37,6 +37,7 @@ export const loginSchema = userSchema.pick({
   password: true,
 })
 
+
 export type LoginSchema = z.infer<typeof loginSchema>
 
 export const updateUserSchema = userSchema.pick({
@@ -46,6 +47,12 @@ export const updateUserSchema = userSchema.pick({
 })
 
 export type UpdateUserSchema = z.infer<typeof updateUserSchema>
+
+export const forgotPasswordSchema = userSchema.pick({
+  email: true,
+})
+
+export type ForgotPasswordSchema = z.infer<typeof forgotPasswordSchema>
 
 export const updatePasswordSchema = userSchema.pick({
   password: true,

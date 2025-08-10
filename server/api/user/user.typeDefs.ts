@@ -31,6 +31,7 @@ export const userTypeDefs = /* GraphQL */ `
     updateUser(input: UpdateUserInput!): Boolean
     updatePassword(input: UpdatePasswordInput!): Boolean
     updateAvatar(input: UpdateAvatarInput!): Image
+    forgotPassword(input: ForgotPasswordInput!): Boolean
   }
 
   input RegisterUserInput {
@@ -38,6 +39,10 @@ export const userTypeDefs = /* GraphQL */ `
     firstName: String!
     lastName: String!
     password: String!
+  }
+
+  input ForgotPasswordInput {
+    email: EmailAddress!
   }
 
   input UpdateUserInput {

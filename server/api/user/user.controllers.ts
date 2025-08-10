@@ -1,12 +1,15 @@
 import { GraphQLError } from "graphql";
-import { LoginInput, Maybe, User, RegisterUserInput, UpdateUserInput, UpdatePasswordInput, UpdateAvatarInput, Image } from "../__generated__/graphql";
-import { UserModel } from "./user.models";
+import { LoginInput, Maybe, User, RegisterUserInput, UpdateUserInput, UpdatePasswordInput, UpdateAvatarInput, Image, ForgotPasswordInput } from "../__generated__/graphql";
+import { UserDocument, UserModel } from "./user.models";
 import { Context } from "../../apollo/context";
 import { NotFoundError, UnauthorizedError } from "../error";
 import jwt from "jsonwebtoken";
 import jwtConfig from "../../services/jwt/jwt.config";
+import appConfig from "../../app.config";
 import { USER_TOKEN_COOKIE_NAME } from "./user.const";
 import { deleteImage, uploadImage } from "../../services/cloudinary/cloudinary.service";
+import { resetPasswordTemplate } from "../../templates/resetPassword.template";
+import { sendEmail } from "../../services/nodemailer/nodemailer.service";
 
 export const login = async(input: Maybe<LoginInput> | undefined, context: Context): Promise<User> => {
   try {
@@ -128,6 +131,48 @@ export const updatePassword = async(input: UpdatePasswordInput, context: Context
   }
 }
 
+export const forgotPassword = async(input: ForgotPasswordInput): Promise<boolean> => {
+  let user: UserDocument | null = null
+
+  try {
+    user = await UserModel.findOne({email: input.email})
+    
+    if(!user) {
+      throw new NotFoundError('User not found');
+    }
+
+    const resetToken = user.getResetPasswordToken()
+    const resetUrl = `${appConfig.clientUrl}/password/reset/${resetToken}`
+    const message = resetPasswordTemplate({
+      firstName: user.firstName,
+      lastName: user.lastName,
+      resetUrl,
+    })
+
+    await sendEmail({
+      email: user.email,
+      subject: 'reset password',
+      message
+    })
+
+    return true
+  } catch (error) {
+    if(user) {
+      user.resetPasswordToken = undefined
+      user.resetPasswordExpires = undefined
+    }
+
+    throw new GraphQLError('Error reset password', {
+      extensions: {
+        error,
+      },
+    });
+  } finally {
+    if(user) {
+      user.save()
+    }
+  }
+}
 
 export const updateAvatar = async(input: UpdateAvatarInput, context: Context): Promise<Image> => {
   try {
